@@ -4,10 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "botBuild": "npx tsc --project ./src/VKHandler/tsconfig.json",
+    "botStart": "node ./src/VKHandler/VK/MainFrame.js",
+    "VK-BnR": "npm run botBuild & npm run botStart"
   },
   "private": true,
   "dependencies": {
@@ -21,6 +24,7 @@
     "@angular/router": "~11.2.8",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
+    "vk-io": "^4.1.4",
     "zone.js": "~0.11.3"
   },
   "devDependencies": {
