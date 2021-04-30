@@ -7,10 +7,10 @@ enum Steps{
   findMentor,
   mentorRTF,
   mentorINMT,
-  info,
-  hostel,
-  stipend,
-  qestions,
+  infoMenu,
+  entryHostelInfo,
+  stipendInfo,
+  askQuestion,
   whoIsMentor
 }
 
@@ -34,7 +34,7 @@ class SceneProvider {
           .textButton({
             label: "Информация",
             payload: {
-              command: Steps.info
+              command: Steps.infoMenu
             },
             color: ButtonColor.PRIMARY
           })
@@ -106,7 +106,7 @@ class SceneProvider {
           .textButton({
             label: "Задать вопрос",
             payload: {
-              command: Steps.qestions
+              command: Steps.askQuestion
             },
             color: ButtonColor.PRIMARY
           })
@@ -114,7 +114,7 @@ class SceneProvider {
           .textButton({
             label: "О поселении в общежитие",
             payload: {
-              command: Steps.hostel
+              command: Steps.entryHostelInfo
             },
             color: ButtonColor.PRIMARY
           })
@@ -122,7 +122,7 @@ class SceneProvider {
           .textButton({
             label: "О стипендии",
             payload: {
-              command: Steps.stipend,
+              command: Steps.stipendInfo
             },
             color: ButtonColor.PRIMARY
           })
@@ -139,7 +139,7 @@ class SceneProvider {
       return context.scene.step.go(context.messagePayload['command'])
     }
 
-  private async hostel(context: IStepContext){
+  private async entryHostelInfo(context: IStepContext){
     if(context.scene.step.firstTime)
         return context.send({
           message: "Тебе нужно:\n" +
@@ -179,7 +179,7 @@ class SceneProvider {
         return context.scene.step.go(context.messagePayload['command'])
       }
 
-  private async stipend(context: IStepContext){
+  private async stipendInfo(context: IStepContext){
     if(context.scene.step.firstTime)
       return context.send({
         message:"Государственная стипендия (без учета районного коэффициента):\n" +
@@ -211,7 +211,7 @@ class SceneProvider {
     return context.scene.step.go(context.messagePayload['command'])
   }
 
-  private async qestions (context: IStepContext) {
+  private async askQuestion (context: IStepContext) {
     context.send("Задайте свой вопрос, с вами свяжутся в ближайшее время")
     vk.updates.on ('message', async(context, next) => {
       if (context.isOutbox) {
@@ -224,7 +224,7 @@ class SceneProvider {
         return context.scene.step.go(0);
       }
     })
-  } //нужно фиксить
+  } //  понедельнику наверное будет работать
 
   private async whoIsMentor(context: IStepContext){
     if(context.scene.step.firstTime)
@@ -250,9 +250,9 @@ class SceneProvider {
     this.mentorRTF,
     this.mentorINMT,
     this.infoMenu,
-    this.hostel,
-    this.stipend,
-    this.qestions,
+    this.entryHostelInfo,
+    this.stipendInfo,
+    this.askQuestion,
     this.whoIsMentor
   ])
 }
