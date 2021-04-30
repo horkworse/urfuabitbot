@@ -20,7 +20,9 @@ const sceneProvider = new SceneProvider(sceneManager);
 
 
 vk.updates.on("message_new", (context, next) => {
-  return context.scene.enter('abit'); //todo: implement SceneProvider with abit:Array<Scene> @garcher @midnighter
+  return context.scene.enter('abit');
 })
 
 vk.updates.start().then(r => console.log("Start success!!!"));
+
+module.exports = vk;
