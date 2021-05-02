@@ -212,19 +212,20 @@ class SceneProvider {
   }
 
   private async askQuestion (context: IStepContext) {
-    context.send("Задайте свой вопрос, с вами свяжутся в ближайшее время")
-    vk.updates.on ('message', async(context, next) => {
-      if (context.isOutbox) {
-        return;
-      } else {
-        await vk.api.messages.send({
-          chat_id: 345583109,
-          message: context
-        })
-        return context.scene.step.go(0);
-      }
+
+    if (context.isOutbox || context.scene.step.firstTime){
+      context.send("Задайте свой вопрос, с вами свяжутся в ближайшее время")
+      return;
+    }
+    await context.send({
+      peer_id: 345583109,
+      message: "Help me get out:" //todo: @Garcher - сделать композицию запроса *DaleUnixal
     })
-  } //  понедельнику наверное будет работать
+    await context.send("Заявка отправлена!")
+    return context.scene.step.go(0);
+  } //to @DaleUnixal  понедельнику наверное будет работать
+    //todo: @Garcher | Блять, что это за "наверное":?!. Комменты через TODO, прошу вас... *DaleUnixal
+
 
   private async whoIsMentor(context: IStepContext){
     if(context.scene.step.firstTime)
