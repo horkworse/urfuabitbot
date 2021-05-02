@@ -1,6 +1,6 @@
 import {IScene, IStepContext, SceneManager, StepScene} from '@vk-io/scenes';
-import {ButtonColor, Keyboard} from 'vk-io';
-let vk = require('./MainFrame')
+import {ButtonColor, Keyboard, VK} from 'vk-io';
+
 
 enum Steps{
   main,
@@ -21,7 +21,7 @@ class SceneProvider {
   private async helloMenu(context: IStepContext){
     if(context.scene.step.firstTime){
       return context.send({
-        message: "Здравствуй, что требуется?",
+        message: "Что требуется?",
         keyboard: Keyboard.builder()
           .textButton({
             label: "Найти наставника",
@@ -104,14 +104,6 @@ class SceneProvider {
         message: "Что вы хотите узнать?",
         keyboard: Keyboard.builder()
           .textButton({
-            label: "Задать вопрос",
-            payload: {
-              command: Steps.askQuestion
-            },
-            color: ButtonColor.PRIMARY
-          })
-          .row()
-          .textButton({
             label: "О поселении в общежитие",
             payload: {
               command: Steps.entryHostelInfo
@@ -123,6 +115,14 @@ class SceneProvider {
             label: "О стипендии",
             payload: {
               command: Steps.stipendInfo
+            },
+            color: ButtonColor.PRIMARY
+          })
+          .row()
+          .textButton({
+            label: "Задать вопрос",
+            payload: {
+              command: Steps.askQuestion
             },
             color: ButtonColor.PRIMARY
           })
@@ -212,25 +212,25 @@ class SceneProvider {
   }
 
   private async askQuestion (context: IStepContext) {
-    context.send("Задайте свой вопрос, с вами свяжутся в ближайшее время")
-    vk.updates.on ('message', async(context, next) => {
-      if (context.isOutbox) {
-        return;
-      } else {
-        await vk.api.messages.send({
-          chat_id: 345583109,
-          message: context
-        })
-        return context.scene.step.go(0);
-      }
-    })
-  } //  понедельнику наверное будет работать
+    let userLink = 'vk.com/id' + context.senderId;
+    if (context.scene.step.firstTime || context.isOutbox) {
+      context.send("Задайте свой вопрос, с вами свяжутся в ближайшее время")
+      return;
+    }
+    await context.send({
+      peer_id: 345583109,
+      message: userLink + "\n" + context.text
+    });
+    await context.send("Запрос отправлен, c вами скоро свяжутся")
+    return context.scene.step.go(0);
+
+    }
 
   private async whoIsMentor(context: IStepContext){
     if(context.scene.step.firstTime)
       return context.send({
         message:"Наставники это студенты старших курсов, которые с удовольствием помогут вам начать жизнь в институте. " +
-        "Научат всему что сами умеют и ответят на все вопросы \n" + "Подробнее можете прочесть по ссылке: https://urfu.ru/ru/students/leisure/oso/associacija-studentov-nastavnikov/",
+        "Научат всему что сами умеют и ответят на все вопросы \n" + "Подробнее можете прочитать по ссылке: https://urfu.ru/ru/students/leisure/oso/associacija-studentov-nastavnikov/",
         keyboard: Keyboard.builder()
           .textButton({
             label: "В главное меню",
