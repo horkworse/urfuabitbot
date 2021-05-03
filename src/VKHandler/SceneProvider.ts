@@ -230,8 +230,8 @@ class SceneProvider {
     });
     await context.send("Запрос отправлен, c вами скоро свяжутся")
     return context.scene.step.go(0);
-
     }
+
 
   private async whoIsMentor(context: IStepContext){
     if(context.scene.step.firstTime)
