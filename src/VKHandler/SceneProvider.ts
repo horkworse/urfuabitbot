@@ -1,6 +1,11 @@
 import {IScene, IStepContext, SceneManager, StepScene} from '@vk-io/scenes';
 import {ButtonColor, Keyboard, VK} from 'vk-io';
+import { API } from 'vk-io';
+let PropertyProvider = require('./PropertyProvider')
 
+const api = new API({
+  token: new PropertyProvider().token
+});
 
 enum Steps{
   main,
@@ -212,13 +217,15 @@ class SceneProvider {
   }
 
   private async askQuestion (context: IStepContext) {
-    let userLink = 'vk.com/id' + context.senderId;
+    const [userData] = await api.users.get({user_id: context.senderId});
+    let userLink = '@id' + context.senderId + '(' + userData.first_name + ')' ;
     if (context.scene.step.firstTime || context.isOutbox) {
       context.send("Задайте свой вопрос, с вами свяжутся в ближайшее время")
       return;
     }
     await context.send({
       peer_id: 345583109,
+      //peer_id: 252077263,
       message: userLink + "\n" + context.text
     });
     await context.send("Запрос отправлен, c вами скоро свяжутся")
