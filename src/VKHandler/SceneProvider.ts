@@ -91,17 +91,35 @@ class SceneProvider {
 
   private async mentorRTF(context: IStepContext){
     return context.send({
-
+      message: "Для того чтобы найти наставника, введите номер группы в формате:\"РИ-110023\"",
+      keyboard: Keyboard.builder()
+          .textButton({
+            label: "В главное меню",
+            payload: {
+              command: Steps.main
+            },
+            color: ButtonColor.SECONDARY
+          })
+          .oneTime().inline()
     })
     return context.scene.step.go(context.messagePayload['command']);
-  } //Антон плиз заполни
+  } 
 
   private async mentorINMT(context: IStepContext){
     return context.send({
-
+      message: "Для того чтобы найти наставника, введите номер группы в формате:\"МТ-110023\"",
+      keyboard: Keyboard.builder()
+          .textButton({
+            label: "В главное меню",
+            payload: {
+              command: Steps.main
+            },
+            color: ButtonColor.SECONDARY
+          })
+          .oneTime().inline()
     })
     return context.scene.step.go(context.messagePayload['command']);
-  }//И это тоже
+  }
 
   private async infoMenu(context: IStepContext) {
     if(context.scene.step.firstTime)
