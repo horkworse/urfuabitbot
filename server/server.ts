@@ -1,9 +1,11 @@
-import express from  'express';
+import express from 'express';
 import {MongoClient} from 'mongodb';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import {MongoOptions} from './config/mongoOptions';
 import mongoose from 'mongoose';
+import {Mentor} from './models/mentor';
+import {Institute} from './models/Institute';
 
 let app = express();
 const port = 5000;
@@ -28,4 +30,23 @@ mongoose.connect(MongoOptions.URI, (err: any) =>{
     console.error()
   console.log("[MNG] Successfully connected to MongoDB")
 });
+
+let fistMaster : Mentor = new Mentor({
+  firstName: 'Dale',
+  group: undefined,
+  institute: Institute.rtf,
+  inviteKey: '123dasd3424kfl',
+  secondName: 'Ponuhal',
+  vkLink: '',
+  admin: true,
+  password: "13131313",
+  username: "unixalunixal"
+});
+
+let model = Mentor.model;
+console.log(model)
+let myBeBack = model.getMentorByUsername("unixalunixal").then(mnt => {
+  console.log(mnt);
+}).catch(re => console.log(re));
+
 
