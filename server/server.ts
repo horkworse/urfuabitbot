@@ -3,12 +3,14 @@ import {MongoClient} from 'mongodb';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import {MongoOptions} from './config/mongoOptions';
-import mongoose from 'mongoose';
+import mongoose, {Types} from 'mongoose';
 import {IMentor, Mentor} from './models/mentor';
 import {Institute} from './models/Institute';
 import {Group, IGroup} from './models/group';
 import {User} from './models/user';
 import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
+import {group} from "@angular/animations";
+import ObjectId = module
 
 let app = express();
 let jsonParser = express.json();
@@ -71,7 +73,7 @@ app.post("/createNewUser", jsonParser,async (req, res) => {
       await mentor.saveMentor();
       let group = await new Group([mentor], mentor.institute, groupInfo.groupIndex);
       await group.saveGroup();
-     mentor.group = group;
+      mentor.group = group;
       group.mentors = [mentor]
       await group.saveGroup();
       await mentor.saveMentor();
@@ -104,3 +106,13 @@ app.post("/createNewUser", jsonParser,async (req, res) => {
    */
 })
 
+app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", async (req,res) => {
+  let correctGroup = Group.getModel().find({groupIndex: req.params.group}).exec().then(async  result =>{
+    if (!result)
+      throw new Error();
+    else {
+      result[0].mentors = result[0].mentors.filter(e => e !== mongoose.Types.ObjectId(req.params.mentor));
+      await result[0].saveGroup();
+    }
+  });
+})
