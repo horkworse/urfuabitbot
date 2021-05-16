@@ -89,18 +89,28 @@ app.post("/createNewUser", jsonParser,async (req, res) => {
 })
 
 app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", async (req,res) => {
-  let correctGroup = Group.getModel().find({groupIndex: req.params.group}).exec().then(async  result =>{
+  Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
     if (!result) {
       res.sendStatus(401).send({
         error: "SomeThing went wrong"
       })
       throw new Error();
     }
-    //result[0].mentors = result[0].mentors.filter(e => e !== mongoose.Types.ObjectId(req.params.mentor));
     result[0].mentors = result[0].mentors.filter(e =>
-       !mongoose.Types.ObjectId(req.params.mentor).equals(<mongoose.Types.ObjectId>e)
+      !mongoose.Types.ObjectId(req.params.mentor).equals(<mongoose.Types.ObjectId>e)
     );
     await result[0].saveGroup();
+    res.sendStatus(200);
+  });
+  Mentor.getModel().find({_id: req.params.mentor}).exec().then(async result => {
+    if (!result) {
+      res.sendStatus(401).send({
+        error: "SomeThing went wrong"
+      })
+      throw new Error();
+    }
+    result[0].group = null;
+    await result[0].saveMentor();
     res.sendStatus(200);
   });
 })
