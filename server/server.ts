@@ -90,8 +90,8 @@ app.post("/createNewUser", jsonParser,async (req, res) => {
 
 app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", async (req,res) => {
   Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
-    if (!result) {
-      res.sendStatus(401).send({
+    if (result.length !== 0) {
+      res.status(401).send({
         error: "SomeThing went wrong"
       })
       throw new Error();
@@ -103,8 +103,8 @@ app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", async (req,res
     res.sendStatus(200);
   });
   Mentor.getModel().find({_id: req.params.mentor}).exec().then(async result => {
-    if (!result) {
-      res.sendStatus(401).send({
+    if (result.length !== 0) {
+      res.status(401).send({
         error: "SomeThing went wrong"
       })
       throw new Error();
@@ -114,3 +114,27 @@ app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", async (req,res
     res.sendStatus(200);
   });
 })
+
+app.post("/mentor/addToGroup/mentor=:mentor&group=:group",async (req, res) => {
+  Group.getModel().find({_id: mongoose.Types.ObjectId(req.params.group)}).exec().then(async resultGroup => {
+    if (resultGroup.length !== 0) {
+      res.status(401).send({
+        error: "SomeThing went wrong"
+      })
+      throw new Error();
+    }
+    Mentor.getModel().find({_id: req.params.mentor}).exec().then(async resultMentor => {
+      if (resultMentor.length !== 0) {
+        res.status(401).send({
+          error: "SomeThing went wrong"
+        })
+        throw new Error();
+      }
+      resultGroup[0].mentors.push(resultMentor[0]._id);
+      resultMentor[0].group = resultGroup[0]._id;
+      await resultGroup[0].saveGroup();
+      await resultMentor[0].saveMentor();
+    })
+  })
+})
+
