@@ -3,6 +3,13 @@ import {Institute} from './Institute';
 import {Student} from './student';
 import {DocumentType, getModelForClass, mongoose, prop, Ref, ReturnModelType} from '@typegoose/typegoose';
 
+export interface IGroup{
+  _id: mongoose.Types.ObjectId
+  mentors: Ref<Mentor>[]
+  students: Ref<Student>[]
+  institute: Institute
+  groupIndex: string
+}
 
 export class Group {
   public static getModel(){
@@ -10,10 +17,10 @@ export class Group {
 }
   @prop()
   _id: mongoose.Types.ObjectId
-  @prop({ default: []})
-  mentors: Array<Mentor>
-  @prop({default: []})
-  students: Array<Student>
+  @prop({ default: [], ref: () => Mentor})
+  mentors: Ref<Mentor>[]
+  @prop({default: [], ref: ()=>Student})
+  students: Ref<Student>[]
   @prop({required: true})
   institute: Institute
   @prop({required: true})
@@ -36,7 +43,7 @@ export class Group {
 
   public static async createGroupBy(index: string, inst: Institute){
     let model = this.getModel();
-    let response = await model.find({inst, index}).exec();
+    let response = await model.find({institute:inst, groupIndex:index}).exec();
     if(response.length != 0)
       return;
     await model.create({
@@ -67,7 +74,7 @@ export class Group {
       groupIndex: this.groupIndex,
       students: []
     }).then(x => {
-      return x;
+      return this;
     });
   }
 
