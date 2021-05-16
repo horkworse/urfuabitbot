@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 
 
 export interface IMentor{
-  group: Group
+  group: Group | Ref<Group>
   vkLink: string
   institute: Institute
   firstName: string
@@ -20,12 +20,13 @@ export class Mentor implements IMentor{
   public static getModel(){
    return getModelForClass(Mentor);
   }
+
   @prop()
   _id: mongoose.Types.ObjectId
   @prop({required: true})
   firstName: string;
-  @prop()
-  group: Group;
+  @prop({ref: ()=>Group})
+  group: Ref<Group>;
   @prop({required: true})
   institute: Institute;
   @prop({required: true})
