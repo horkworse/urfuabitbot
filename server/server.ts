@@ -38,23 +38,6 @@ mongoose.connect(MongoOptions.URI, (err: any) =>{
 });
 
 
-// let signupNewMentor  = async () => {
-//   let mentor = new Mentor({
-//     firstName: 'Andrey', group: undefined, institute: 1, secondName: 'Govno', vkLink: '123ld0933'
-//   });
-//   await mentor.saveMentor();
-//   let group = await new Group([mentor], 1, "РИФО-001");
-//   await group.saveGroup();
-//   mentor.group = group;
-//   group.mentors = [mentor]
-//   await group.saveGroup();
-//   await mentor.saveMentor();
-//   let user = new User(mentor.getHashCode().toString(), mentor);
-//   user.saveUser().catch(console.error);
-// }
-//
-// signupNewMentor();
-
 app.post("/createNewUser", jsonParser,async (req, res) => {
   if(!req.body)
     res.sendStatus(400);

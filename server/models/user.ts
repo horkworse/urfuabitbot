@@ -1,5 +1,8 @@
 import {getModelForClass, prop} from '@typegoose/typegoose';
 import {Mentor} from './mentor';
+import jwt from "jsonwebtoken";
+import * as options from '../config/encryptionOptions.json';
+import moment from "moment";
 
 export class User {
   public static getModel(){
@@ -44,5 +47,15 @@ export class User {
       username: this.username,
       mentor: this.mentor
     })
+  }
+
+  public generateToken(){
+    return jwt.sign({
+      "sub":{
+        "admin": this.admin,
+        "mentor": this.mentor._id.toHexString()
+      },
+      "expire": moment().add(6, 'h')
+    }, options.secret);
   }
 }
