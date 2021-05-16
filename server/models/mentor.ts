@@ -1,12 +1,13 @@
 import {Institute} from './Institute';
 import {Group} from './group';
-import {getModelForClass, modelOptions, prop, ReturnModelType} from '@typegoose/typegoose';
+import {getModelForClass, modelOptions, prop, Ref, ReturnModelType} from '@typegoose/typegoose';
+import {Types} from 'mongoose';
 
 export interface IMentor{
   admin: boolean
   username?: string
   password?: string
-  group: Group
+  group: Ref<Group>
   vkLink: string
   institute: Institute
   inviteKey: string
@@ -17,21 +18,25 @@ export interface IMentor{
 
 @modelOptions({schemaOptions: {collection: 'mentors'}})
 export class Mentor implements IMentor{
-  public static model = getModelForClass(Mentor);
+  public static getModel(){
+   return getModelForClass(Mentor);
+  }
 
+  @prop({required:true})
+  _id: Types.ObjectId
   @prop()
   admin: boolean;
-  @prop()
+  @prop({required: true})
   firstName: string;
-  @prop()
-  group: Group;
-  @prop()
+  @prop({ref: ()=>Group})
+  group: Ref<Group>;
+  @prop({required: true})
   institute: Institute;
-  @prop()
+  @prop({required: true})
   inviteKey: string;
   @prop()
   password: string;
-  @prop()
+  @prop({required: true})
   secondName: string;
   @prop()
   username: string;
@@ -48,11 +53,10 @@ export class Mentor implements IMentor{
     this.group = options.group;
     this.inviteKey = options.inviteKey;
     this.institute = options.institute;
-    Mentor.model = getModelForClass(Mentor);
   }
 
   public async Save(){
-    await Mentor.model.create({
+    await Mentor.getModel().create({
       username: this.username,
       password: this.password,
       vkLink: this.vkLink,
@@ -68,4 +72,10 @@ export class Mentor implements IMentor{
   public static async getMentorByUsername(this: ReturnModelType<typeof Mentor>,username: string){
     return this.find({username}).exec();
   }
+
+  public saySmth(){
+    console.log(this.username)
+  }
+
+  //todo: CreateNewMentor()
 }
