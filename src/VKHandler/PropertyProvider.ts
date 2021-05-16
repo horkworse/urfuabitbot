@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 
 class PropertyProvider{
-  private _data: Object;
+  private _data: object;
   private readonly _token: string;
 
 
@@ -11,6 +11,7 @@ class PropertyProvider{
 
   constructor() {
     this._data = this.readProperty();
+    // @ts-ignore
     this._token = this._data.ConnectionStrings.token;
   }
 
@@ -19,5 +20,6 @@ class PropertyProvider{
     return JSON.parse(rawData.toString());
   }
 }
+
 
 module.exports = PropertyProvider;
