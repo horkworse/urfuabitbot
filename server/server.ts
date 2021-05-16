@@ -10,7 +10,6 @@ import {Group, IGroup} from './models/group';
 import {User} from './models/user';
 import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
 import {group} from "@angular/animations";
-import ObjectId = module
 
 let app = express();
 let jsonParser = express.json();
@@ -91,11 +90,17 @@ app.post("/createNewUser", jsonParser,async (req, res) => {
 
 app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", async (req,res) => {
   let correctGroup = Group.getModel().find({groupIndex: req.params.group}).exec().then(async  result =>{
-    if (!result)
+    if (!result) {
+      res.sendStatus(401).send({
+        error: "SomeThing went wrong"
+      })
       throw new Error();
-    else {
-      result[0].mentors = result[0].mentors.filter(e => e !== mongoose.Types.ObjectId(req.params.mentor));
-      await result[0].saveGroup();
     }
+    //result[0].mentors = result[0].mentors.filter(e => e !== mongoose.Types.ObjectId(req.params.mentor));
+    result[0].mentors = result[0].mentors.filter(e =>
+       !mongoose.Types.ObjectId(req.params.mentor).equals(<mongoose.Types.ObjectId>e)
+    );
+    await result[0].saveGroup();
+    res.sendStatus(200);
   });
 })
