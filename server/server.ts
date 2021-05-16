@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import {Mentor} from './models/mentor';
 import {Institute} from './models/Institute';
 import {Group} from './models/group';
+import {User} from './models/user';
 
 let app = express();
 const port = 5000;
@@ -32,25 +33,19 @@ mongoose.connect(MongoOptions.URI, (err: any) =>{
   console.log("[MNG] Successfully connected to MongoDB")
 });
 
-// let fistMaster : Mentor = new Mentor({
-//   firstName: 'Dale',
-//   group: undefined,
-//   institute: Institute.rtf,
-//   inviteKey: '123dasd3424kfl',
-//   secondName: 'Ponuhal',
-//   vkLink: '',
-//   admin: true,
-//   password: "13131313",
-//   username: "unixalunixal"
-// });
 
-// let model = Mentor.getModel();
-// model.getMentorByUsername("unixalunixal")
-//   .then(mnt => {
-//   let array: Array<Mentor> = mnt;
-//   mnt.forEach(q=>q.saySmth());
-//   new Group(mnt, Institute.rtf, "РИ-290023").save().catch(console.error);
-//   })
-//   .catch(re => console.log(re));
+let signupNewMentor  = async () => {
+  let mentor = new Mentor({
+    firstName: 'Andrey', group: undefined, institute: 1, secondName: 'Govno', vkLink: '123ld0933'
+  });
+  await mentor.saveMentor();
+  let group = await new Group([mentor], 1, "РИФО-001").saveGroup();
+  mentor.group = group;
+  await mentor.saveMentor();
+  let user = new User(mentor.getHashCode().toString(), mentor);
+  user.saveUser().catch(console.error);
+}
 
 
+
+signupNewMentor();

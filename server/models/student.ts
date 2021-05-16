@@ -1,6 +1,7 @@
 import {Institute} from './Institute';
 import {getModelForClass, prop} from '@typegoose/typegoose';
 import {Schema, Types} from 'mongoose';
+import * as mongoose from 'mongoose';
 
 
 
@@ -8,8 +9,9 @@ export class Student {
   public static getModel(){
     return getModelForClass(Student)
   }
-  @prop({required: true})
-  _id?: Types.ObjectId
+
+  @prop()
+  _id: mongoose.Types.ObjectId
   @prop({required: true})
   firstName: string
   @prop({required: true})
@@ -28,11 +30,20 @@ export class Student {
     this.vkLink = vkLink;
     this.institute = institute;
     this.fullname = `${secondName} ${firstName}`;
+    this._id = mongoose.Types.ObjectId(Student.generateObjectId())
   }
 
-  public async save(){
+  private static generateObjectId(){
+    let timestamp = (new Date().getTime() / 1000 | 0).toString(16);
+    return timestamp + 'xxxxxxxxxxxxxxxx'.replace(/[x]/g, function() {
+      return (Math.random() * 16 | 0).toString(16);
+    }).toLowerCase();
+  }
+
+  public async saveStudent(){
     let model = Student.getModel();
     await model.create({
+      _id: this._id,
       firstName: this.firstName,
       institute: this.institute,
       secondName: this.secondName,
