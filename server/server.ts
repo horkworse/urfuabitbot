@@ -7,9 +7,10 @@ import mongoose, {Types} from 'mongoose';
 import {IMentor, Mentor} from './models/mentor';
 import {Institute} from './models/Institute';
 import {Group, IGroup} from './models/group';
-import {User} from './models/user';
+import {IUser, User} from './models/user';
 import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
 import {group} from "@angular/animations";
+import {ensureAuthenticated, UserController} from './controllers/userController';
 
 let app = express();
 let jsonParser = express.json();
@@ -36,6 +37,49 @@ mongoose.connect(MongoOptions.URI, (err: any) =>{
   console.log("[MNG] Successfully connected to MongoDB")
 });
 
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
+
+app.get("/test", ensureAuthenticated, (req, res)=>{
+  res.send("Hello чевапчичи");
+})
+
+app.post("/signup/:inviteKey", (req, res)=>{
+  if(isEmpty(req.body)){
+    return res.sendStatus(204)
+  }
+  let data:IUser = req.body;
+  User.getModel().find({inviteKey: req.params.inviteKey}).exec().then(result => {
+    if(!result)
+      return res.sendStatus(204).send({error: "No users with this InviteKey"});
+    let user = result[0];
+    if(user.username)
+      return res.sendStatus(204).send({error: "User already exist"})
+    UserController.register(user, data.password, data.username).then((x)=>{
+      if(x){
+        return res.sendStatus(200);
+      }
+      return res.sendStatus(204);
+    });
+  })
+})
+
+app.post("/signin/", (req, res)=>{
+  if(isEmpty(req.body))
+    res.status(204).send("No data");
+  let user: IUser = req.body;
+  User.getModel().find({username: user.username}).exec().then(result => {
+    if(result.length === 0){
+      return res.status(204).send("User not exist")
+    }
+    let userModel = result[0];
+    if(UserController.signIn(userModel, user.password)){
+      return res.send({token: userModel.generateToken()})
+    }
+    return res.send("Not correct password");
+  })
+})
 
 app.post("/createNewUser", jsonParser,async (req, res) => {
   if(!req.body)
@@ -88,7 +132,7 @@ app.post("/createNewUser", jsonParser,async (req, res) => {
    */
 })
 
-app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", async (req,res) => {
+app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", ensureAuthenticated, async (req,res) => {
   let correctGroup = Group.getModel().find({groupIndex: req.params.group}).exec().then(async  result =>{
     if (!result) {
       res.sendStatus(401).send({
