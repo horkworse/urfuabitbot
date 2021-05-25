@@ -55,7 +55,7 @@ export class User {
         "admin": this.admin,
         "mentor": this.mentor._id.toHexString()
       },
-      "expire": moment().add(45, 's')
+      "expire": moment().add(72, 'h')
     }, options.secret);
   }
 }

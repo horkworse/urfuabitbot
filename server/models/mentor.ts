@@ -61,6 +61,10 @@ export class Mentor implements IMentor{
     console.log(this.firstName)
   }
 
+  public getFullname(): string{
+    return this.secondName + this.firstName;
+  }
+
   public async saveMentor(){
     let model = Mentor.getModel();
     let response = await model.find({vkLink: this.vkLink}).exec();

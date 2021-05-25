@@ -1,0 +1,15 @@
+<div>
+  <form *ngIf="isLoginForm" [formGroup]="loginForm" class="">
+    <a>Вход в систему</a>
+    <input formControlName="login" placeholder="Username">
+    <input formControlName="password" placeholder="Password" type="password">
+  </form>
+  <form *ngIf="!isLoginForm" [formGroup]="signupForm" class="">
+    <a>Регистрация</a>
+    <input formControlName="inviteKey" placeholder="Invite Key">
+    <input formControlName="login" placeholder="Username">
+    <input formControlName="password" placeholder="Password" type="password">
+  </form>
+  <button (click)="onSubmit()" [innerText]="currentAction"></button>
+  <button (click)="switchForm()" [innerText]="currentTip"></button>
+</div>

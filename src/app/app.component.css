@@ -1,0 +1,10 @@
+.wrapper{
+  display: grid;
+  grid-template-rows: 2fr 0fr 23fr;
+  height: 100vh;
+}
+
+.nav{
+  display: grid;
+  grid-row: 1;
+}
