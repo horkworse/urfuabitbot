@@ -49,6 +49,8 @@ export class LoginComponent implements OnInit {
       console.log(this.loginForm.controls)
       this._auth.authenticate(this.loginForm.value.login, this.loginForm.value.password)
     }
-
+    if(!this.isLoginForm && this.signupForm.valid){
+      this._auth.register(this.signupForm.value.login, this.signupForm.value.password, this.signupForm.value.inviteKey)
+    }
   }
 }

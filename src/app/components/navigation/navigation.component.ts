@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {AuthService} from '../../service/auth/auth.service';
 
 @Component({
   selector: 'app-navigation',
@@ -7,13 +8,22 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavigationComponent implements OnInit {
 
-  public name: string;
+  public name: string = "Login";
 
-  constructor() {
-    this.name = "Login"
+  constructor(private _auth: AuthService) {
   }
 
   ngOnInit(): void {
+    this._auth.isAuth.subscribe(result => {
+      if(result) {
+        this.name = JSON.parse(localStorage.getItem('token')).fullname;
+      }
+      else {
+        localStorage.removeItem('token')
+      }
+    })
+    this._auth.isAuthenticated()
+    this._auth.nameSubject.subscribe(value => this.name = value);
   }
 
 }

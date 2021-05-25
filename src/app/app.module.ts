@@ -10,13 +10,15 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { LoginComponent } from './components/login/login.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
+import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     NavigationComponent,
-    LoginComponent
+    LoginComponent,
+    AdminPanelComponent
   ],
   imports: [
     BrowserModule,

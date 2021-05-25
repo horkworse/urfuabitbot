@@ -62,7 +62,7 @@ export class Mentor implements IMentor{
   }
 
   public getFullname(): string{
-    return this.secondName + this.firstName;
+    return this.secondName +' '+ this.firstName;
   }
 
   public async saveMentor(){

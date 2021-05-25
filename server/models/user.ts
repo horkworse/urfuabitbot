@@ -62,5 +62,6 @@ export class User {
 
 export interface IUser {
   username: string,
-  password: string
+  password: string,
+  admin: boolean
 }

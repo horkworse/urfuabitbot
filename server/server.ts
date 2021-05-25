@@ -69,16 +69,22 @@ app.post("/signin/", (req, res)=>{
     }
     let userModel = result[0];
     if(UserController.signIn(userModel, user.password)){
-      return res.send({
-        token: userModel.generateToken(),
-        fullname: userModel.mentor.getFullname()
+      Mentor.getModel().findById(userModel.mentor).exec().then(result => {
+        return res.send({
+          token: userModel.generateToken(),
+          fullname: result.getFullname()
+        })
       })
-    }
+
+    } else
     return res.send({error: "Not correct password"});
   })
 })
 
 app.post("/createNewUser", ensureAuthenticated ,async (req, res) => {
+  if (!req.user.admin){
+    res.status(400).json({error: "No admin permissions"})
+  }
   if(!req.body)
     res.sendStatus(400);
   let data = req.body;
@@ -144,4 +150,8 @@ app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", ensureAuthenti
     await result[0].saveGroup();
     res.sendStatus(200);
   });
+})
+
+app.get("/validate", ensureAuthenticated, (req, res)=>{
+  res.status(200).json(true)
 })

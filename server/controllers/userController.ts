@@ -8,15 +8,15 @@ import {Mentor} from '../models/mentor';
 
 export class UserController {
   public static async register(user: User, password: string, username: string ){
-    await User.getModel().find({username: username}).exec().then(result => {
+    return await User.getModel().find({username: username}).exec().then(async result => {
       if(result.length !== 0){
         return false;
       }
       user.username = username;
       user.password = bcrypt.hashSync(password, 10);
+      await user.saveUser();
+      return true;
     })
-    await user.saveUser();
-    return true;
   }
 
 
