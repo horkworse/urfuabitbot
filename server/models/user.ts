@@ -55,7 +55,13 @@ export class User {
         "admin": this.admin,
         "mentor": this.mentor._id.toHexString()
       },
-      "expire": moment().add(6, 'h')
+      "expire": moment().add(72, 'h')
     }, options.secret);
   }
+}
+
+export interface IUser {
+  username: string,
+  password: string,
+  admin: boolean
 }

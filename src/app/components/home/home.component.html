@@ -1,0 +1,6 @@
+<form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+  <input formControlName="firstname" placeholder="Имя">
+  <input formControlName="secondname" placeholder="Фамилия">
+  <input formControlName="vkLink" placeholder="Ссылка на ВК">
+  <button (click)="onSubmit()" [innerText]="'Добавить'"></button>
+</form>
