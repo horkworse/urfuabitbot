@@ -3,7 +3,7 @@ import {getModelForClass, prop, mongoose} from '@typegoose/typegoose';
 import {Schema, Types} from 'mongoose';
 
 export interface IStudent{
-  
+
   _id: mongoose.Types.ObjectId;
   firstName: string;
   secondName: string;
@@ -13,7 +13,7 @@ export interface IStudent{
 }
 
 
-export class Student {
+export class Student implements IStudent {
   public static getModel(){
     return getModelForClass(Student)
   }
@@ -32,12 +32,12 @@ export class Student {
   fullname: string
 
 
-  constructor(firstName: string, secondName: string, institute: Institute, vkLink?: string) {
-    this.firstName = firstName;
-    this.secondName = secondName;
-    this.vkLink = vkLink;
-    this.institute = institute;
-    this.fullname = `${secondName} ${firstName}`;
+  constructor(options: IStudent) {
+    this.firstName = options.firstName;
+    this.secondName = options.secondName;
+    this.vkLink = options.vkLink;
+    this.institute = options.institute;
+    this.fullname = `${options.secondName} ${options.firstName}`;
     this._id = mongoose.Types.ObjectId(Student.generateObjectId())
   }
 

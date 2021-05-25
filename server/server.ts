@@ -67,11 +67,22 @@ app.post("/student/addStudentToGroup/group=:group", async(req, res) =>{
       throw new Error();
   let studentData:IStudent = JSON.parse(req.body)
   Student.getModel().find({vkLink: studentData.vkLink}).exec().then(async resultStudent =>{
-    if(!resultStudent)
+    if(resultStudent.length !== 0){
+      res.sendStatus(400).send({
+        error: "SomeThing wrong"
+      })
       throw new Error();
-    resultGroup[0].students.push(resultStudent[0]._id)
-    await resultGroup[0].saveGroup;
-    await resultStudent[0].saveStudent;
+    }
+      let newStudent = new Student({
+        firstName: studentData.firstName,
+        secondName: studentData.secondName,
+        institute: studentData.institute,
+        vkLink: studentData.vkLink,
+        fullname: studentData.fullname,
+        _id: studentData._id
+    })
+    await newStudent.saveStudent();
+    resultGroup[0].students.push(newStudent[0]._id)
     }).catch(console.error);
   }).catch(console.error);
 });
