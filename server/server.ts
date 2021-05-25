@@ -9,6 +9,7 @@ import {Institute} from './models/Institute';
 import {Group, IGroup} from './models/group';
 import {User} from './models/user';
 import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
+import {IStudent, Student} from './models/student'
 
 let app = express();
 let jsonParser = express.json();
@@ -52,6 +53,29 @@ mongoose.connect(MongoOptions.URI, (err: any) =>{
 // }
 //
 // signupNewMentor();
+app.get("/mentor/getGroupByMentor/mentor=:mentor", async(req, res) =>{
+  Mentor.getModel().find({ _id: mongoose.Types.ObjectId(req.params.mentor)}).exec().then( async result=>{
+    if(!result)
+      throw new Error();
+    res.send((<mongoose.Types.ObjectId>result[0].group).toHexString());
+  }).catch(console.error)
+});
+
+app.post("/student/addStudentToGroup/group=:group", async(req, res) =>{
+  Group.getModel().find({_id: mongoose.Types.ObjectId(req.params.group)}).exec().then(async resultGroup =>{
+    if(!resultGroup)
+      throw new Error();
+  let studentData:IStudent = JSON.parse(req.body)
+  Student.getModel().find({vkLink: studentData.vkLink}).exec().then(async resultStudent =>{
+    if(!resultStudent)
+      throw new Error();
+    resultGroup[0].students.push(resultStudent[0]._id)
+    await resultGroup[0].saveGroup;
+    await resultStudent[0].saveStudent;
+    }).catch(console.error);
+  }).catch(console.error);
+});
+ 
 
 app.post("/createNewUser", jsonParser,async (req, res) => {
   if(!req.body)

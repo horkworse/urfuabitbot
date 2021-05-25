@@ -2,6 +2,15 @@ import {Institute} from './Institute';
 import {getModelForClass, prop, mongoose} from '@typegoose/typegoose';
 import {Schema, Types} from 'mongoose';
 
+export interface IStudent{
+  
+  _id: mongoose.Types.ObjectId;
+  firstName: string;
+  secondName: string;
+  vkLink?: string;
+  institute: Institute;
+  fullname: string;
+}
 
 
 export class Student {
