@@ -8,6 +8,7 @@ import {IMentor, Mentor} from './models/mentor';
 import {Group, IGroup} from './models/group';
 import {IUser, User} from './models/user';
 import {ensureAuthenticated, UserController} from './controllers/userController';
+import {IStudent, Student} from './models/student';
 
 let app = express();
 let jsonParser = express.json();
@@ -190,3 +191,37 @@ app.post("/mentor/addToGroup/mentor=:mentor&group=:group",async (req, res) => {
 app.get("/validate", ensureAuthenticated, (req, res)=>{
   res.status(200).json(true)
 })
+
+app.get("/mentor/getGroupByMentor/mentor=:mentor", async(req, res) =>{
+  Mentor.getModel().find({ _id: mongoose.Types.ObjectId(req.params.mentor)}).exec().then( async result=>{
+    if(!result)
+      throw new Error();
+    res.send((<mongoose.Types.ObjectId>result[0].group).toHexString());
+  }).catch(console.error)
+});
+
+app.post("/student/addStudentToGroup/group=:group", async(req, res) =>{
+  Group.getModel().find({_id: mongoose.Types.ObjectId(req.params.group)}).exec().then(async resultGroup =>{
+    if(!resultGroup)
+      throw new Error();
+    let studentData:IStudent = JSON.parse(req.body)
+    Student.getModel().find({vkLink: studentData.vkLink}).exec().then(async resultStudent =>{
+      if(resultStudent.length !== 0){
+        res.sendStatus(400).send({
+          error: "SomeThing wrong"
+        })
+        throw new Error();
+      }
+      let newStudent = new Student({
+        firstName: studentData.firstName,
+        secondName: studentData.secondName,
+        institute: studentData.institute,
+        vkLink: studentData.vkLink,
+        fullname: studentData.fullname,
+        _id: studentData._id
+      })
+      await newStudent.saveStudent();
+      resultGroup[0].students.push(newStudent[0]._id)
+    }).catch(console.error);
+  }).catch(console.error);
+});
