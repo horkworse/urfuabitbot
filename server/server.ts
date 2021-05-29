@@ -5,11 +5,9 @@ import bodyParser from 'body-parser';
 import {MongoOptions} from './config/mongoOptions';
 import mongoose, {Types} from 'mongoose';
 import {IMentor, Mentor} from './models/mentor';
-import {Institute} from './models/Institute';
 import {Group, IGroup} from './models/group';
-import {User} from './models/user';
-import {addWarning} from '@angular-devkit/build-angular/src/utils/webpack-diagnostics';
-import {group} from "@angular/animations";
+import {IUser, User} from './models/user';
+import {ensureAuthenticated, UserController} from './controllers/userController';
 
 let app = express();
 let jsonParser = express.json();
@@ -20,10 +18,10 @@ app.listen(port, ()=>{
 })
 
 let options : cors.CorsOptions = {
-  origin: "http://localhost:4000"
+  origin: "http://localhost:4200"
 }
 
-//app.use(cors(options));
+app.use(cors(options));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}))
 
@@ -36,8 +34,57 @@ mongoose.connect(MongoOptions.URI, (err: any) =>{
   console.log("[MNG] Successfully connected to MongoDB")
 });
 
+function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}
 
-app.post("/createNewUser", jsonParser,async (req, res) => {
+
+app.post("/signup/:inviteKey", (req, res)=>{
+  if(isEmpty(req.body)){
+    return res.sendStatus(204)
+  }
+  let data:IUser = req.body;
+  User.getModel().find({inviteKey: req.params.inviteKey}).exec().then(result => {
+    if(!result)
+      return res.status(204).send({error: "No users with this InviteKey"});
+    let user = result[0];
+    if(user.username)
+      return res.status(204).send({error: "User already exist"})
+    UserController.register(user, data.password, data.username).then((x)=>{
+      if(x){
+        return res.sendStatus(200);
+      }
+      return res.sendStatus(204);
+    });
+  })
+})
+
+app.post("/signin/", (req, res)=>{
+  if(isEmpty(req.body))
+    res.status(204).send({error: "No data"});
+  let user: IUser = req.body;
+  User.getModel().find({username: user.username}).exec().then(result => {
+    if(result.length === 0){
+      return res.status(204).send({error: 'User not exist'})
+    }
+    let userModel = result[0];
+    if(UserController.signIn(userModel, user.password)){
+      Mentor.getModel().findById(userModel.mentor).exec().then(result => {
+        return res.send({
+          token: userModel.generateToken(),
+          fullname: result.getFullname()
+        })
+      })
+
+    } else
+    return res.send({error: "Not correct password"});
+  })
+})
+
+app.post("/createNewUser", ensureAuthenticated ,async (req, res) => {
+  if (!req.user.admin){
+    res.status(400).json({error: "No admin permissions"})
+  }
   if(!req.body)
     res.sendStatus(400);
   let data = req.body;
@@ -88,7 +135,8 @@ app.post("/createNewUser", jsonParser,async (req, res) => {
    */
 })
 
-app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", async (req,res) => {
+
+app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", ensureAuthenticated, async (req,res) => {
   Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
     if (result.length !== 0) {
       res.status(401).send({
@@ -138,3 +186,7 @@ app.post("/mentor/addToGroup/mentor=:mentor&group=:group",async (req, res) => {
   })
 })
 
+
+app.get("/validate", ensureAuthenticated, (req, res)=>{
+  res.status(200).json(true)
+})

@@ -3,13 +3,20 @@ import * as bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import * as options from '../config/encryptionOptions.json'
 import moment from 'moment';
+import {mongoose} from '@typegoose/typegoose';
+import {Mentor} from '../models/mentor';
 
 export class UserController {
   public static async register(user: User, password: string, username: string ){
-    user.username = username;
-    user.password = bcrypt.hashSync(password, 10);
-    await user.saveUser();
-    return true;
+    return await User.getModel().find({username: username}).exec().then(async result => {
+      if(result.length !== 0){
+        return false;
+      }
+      user.username = username;
+      user.password = bcrypt.hashSync(password, 10);
+      await user.saveUser();
+      return true;
+    })
   }
 
 
@@ -20,33 +27,35 @@ export class UserController {
     return true;
   }
 
-  public static ensureAuthenticated(req,res,next){
-    if (!req.headers.authorization){
-      return res.status(401).send({error: "TokenMissing"})
-    }
-    let token = req.headers.authorization.split(' ')[1];
-
-    let payload = null;
-    try {
-      payload = jwt.decode(options.secret)
-    }
-    catch (err) {
-      return res.status(401).send({error: "TokenInvalid"})
-    }
-
-    if(payload.exp <= moment().unix()){
-      return res.status(401).send({error: "TokenExpired"})
-    }
-
-    User.getModel().findById(payload.id).exec().then(result => {
-      if(!result){
-        return res.status(401).send({
-          error: "UserNotFound"
-        });
-      }
-      req.user = payload.sub;
-      next();
-    })
-  }
+  public static
 }
 
+export function ensureAuthenticated(req,res,next){
+  if (!req.headers.authorization){
+    return res.status(401).send({error: "TokenMissing"})
+  }
+  let token = req.headers.authorization.split(' ')[1];
+
+  let payload = null;
+  try {
+    payload = jwt.verify(token, options.secret);
+  }
+  catch (err) {
+    return res.status(401).send({error: "TokenInvalid"})
+  }
+
+  if(moment(payload.expire).unix() <= moment().unix()){
+    console.log(payload.expire - moment().unix())
+    return res.status(401).send({error: "TokenExpired"})
+  }
+
+  Mentor.getModel().findById(mongoose.Types.ObjectId(payload.sub.mentor)).exec().then(result => {
+    if(!result){
+      return res.status(401).send({
+        error: "UserNotFound"
+      });
+    }
+    req.user = payload.sub;
+    next();
+  })
+}
