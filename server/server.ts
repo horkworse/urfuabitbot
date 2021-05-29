@@ -135,22 +135,57 @@ app.post("/createNewUser", ensureAuthenticated ,async (req, res) => {
    */
 })
 
+
 app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", ensureAuthenticated, async (req,res) => {
-  let correctGroup = Group.getModel().find({groupIndex: req.params.group}).exec().then(async  result =>{
-    if (!result) {
+  Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
+    if (result.length !== 0) {
       res.status(401).send({
         error: "SomeThing went wrong"
       })
       throw new Error();
     }
-    //result[0].mentors = result[0].mentors.filter(e => e !== mongoose.Types.ObjectId(req.params.mentor));
     result[0].mentors = result[0].mentors.filter(e =>
-       !mongoose.Types.ObjectId(req.params.mentor).equals(<mongoose.Types.ObjectId>e)
+      !mongoose.Types.ObjectId(req.params.mentor).equals(<mongoose.Types.ObjectId>e)
     );
     await result[0].saveGroup();
     res.sendStatus(200);
   });
+  Mentor.getModel().find({_id: req.params.mentor}).exec().then(async result => {
+    if (result.length !== 0) {
+      res.status(401).send({
+        error: "SomeThing went wrong"
+      })
+      throw new Error();
+    }
+    result[0].group = null;
+    await result[0].saveMentor();
+    res.sendStatus(200);
+  });
 })
+
+app.post("/mentor/addToGroup/mentor=:mentor&group=:group",async (req, res) => {
+  Group.getModel().find({_id: mongoose.Types.ObjectId(req.params.group)}).exec().then(async resultGroup => {
+    if (resultGroup.length !== 0) {
+      res.status(401).send({
+        error: "SomeThing went wrong"
+      })
+      throw new Error();
+    }
+    Mentor.getModel().find({_id: req.params.mentor}).exec().then(async resultMentor => {
+      if (resultMentor.length !== 0) {
+        res.status(401).send({
+          error: "SomeThing went wrong"
+        })
+        throw new Error();
+      }
+      resultGroup[0].mentors.push(resultMentor[0]._id);
+      resultMentor[0].group = resultGroup[0]._id;
+      await resultGroup[0].saveGroup();
+      await resultMentor[0].saveMentor();
+    })
+  })
+})
+
 
 app.get("/validate", ensureAuthenticated, (req, res)=>{
   res.status(200).json(true)
