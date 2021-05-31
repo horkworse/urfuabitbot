@@ -136,7 +136,6 @@ app.post("/createNewUser", ensureAuthenticated ,async (req, res) => {
    */
 })
 
-
 app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", ensureAuthenticated, async (req,res) => {
   Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
     if (result.length !== 0) {
@@ -187,7 +186,6 @@ app.post("/mentor/addToGroup/mentor=:mentor&group=:group", ensureAuthenticated,a
   })
 })
 
-
 app.get("/validate", ensureAuthenticated, (req, res)=>{
   res.status(200).json(true)
 })
@@ -226,6 +224,48 @@ app.post("/student/addStudentToGroup/group=:group", ensureAuthenticated,async(re
   }).catch(console.error);
 });
 
-app.get("/student/getAll/lastIndex=:lastIndex&count=:count", ensureAuthenticated, (req, res)=>{
 
+app.get("/student/getAll/lastIndex=:lastIndex&count=:count", ensureAuthenticated, (req, res)=>{})
+
+
+app.delete("/student/removeFromGroup/student=:student&group=:group", ensureAuthenticated, async (req,res) =>{
+  Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
+    if (result.length !== 0) {
+      res.status(401).send({
+        error: "SomeThing went wrong"
+      })
+      throw new Error();
+    }
+    result[0].students = result[0].students.filter(e =>
+      !mongoose.Types.ObjectId(req.params.students).equals(<mongoose.Types.ObjectId>e)
+    );
+    await result[0].saveGroup();
+    res.sendStatus(200);
+  });
+})
+
+app.get("bot/getMentors/group:=group", ensureAuthenticated, async (req, res) => {
+  Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
+    if (result.length !== 0) {
+      res.status(401).send({
+        error: "SomeThing went wrong"
+      })
+      throw new Error();
+    }
+    let groupMentors = "";
+      Mentor.getModel().find({_id: {$in: result.map(x => x[0])}}).exec().then(async result => {
+          if (result.length !== 0) {
+          res.status(401).send({
+            error: "SomeThing went wrong"
+          })
+          throw new Error();
+        }
+        for(let mnt of result){
+          groupMentors += "id" + result[0].vkLink + "(" + result[0].firstName + " " + result[0].secondName +")  \n";
+        }
+        res.send({
+          text: groupMentors.trimEnd()
+        })
+      })
+  })
 })
