@@ -225,3 +225,7 @@ app.post("/student/addStudentToGroup/group=:group", ensureAuthenticated,async(re
     }).catch(console.error);
   }).catch(console.error);
 });
+
+app.get("/student/getAll/lastIndex=:lastIndex&count=:count", ensureAuthenticated, (req, res)=>{
+
+})

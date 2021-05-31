@@ -11,6 +11,9 @@ import { LoginComponent } from './components/login/login.component';
 import {ReactiveFormsModule} from '@angular/forms';
 import {HttpClientModule} from '@angular/common/http';
 import { AdminPanelComponent } from './components/admin-panel/admin-panel.component';
+import { StudentSearchComponent } from './components/admin-panel/children/student-search.web/student-search.web.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -18,7 +21,8 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
     HomeComponent,
     NavigationComponent,
     LoginComponent,
-    AdminPanelComponent
+    AdminPanelComponent,
+    StudentSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -29,10 +33,17 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
     ]),
     NgbModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    BrowserAnimationsModule,
+    MatDialogModule
   ],
+  entryComponents: [
+    StudentSearchComponent
+  ]
+  ,
   providers: [
-    {provide: "BASE_URL", useFactory: getBaseUrl}
+    {provide: "BASE_URL", useFactory: getBaseUrl},
+    {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}}
   ],
   bootstrap: [AppComponent]
 })
