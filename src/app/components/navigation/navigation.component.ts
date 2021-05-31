@@ -9,12 +9,13 @@ import {AuthService} from '../../service/auth/auth.service';
 export class NavigationComponent implements OnInit {
 
   public name: string = "Login";
+  private _isAuthenticatedSubs;
 
   constructor(private _auth: AuthService) {
   }
 
   ngOnInit(): void {
-    this._auth.isAuth.subscribe(result => {
+    this._isAuthenticatedSubs = this._auth.isAuth.subscribe(result => {
       if(result) {
         this.name = JSON.parse(localStorage.getItem('token')).fullname;
       }

@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!isAuthorized()">
   <form *ngIf="isLoginForm" [formGroup]="loginForm" class="">
     <a>Вход в систему</a>
     <input formControlName="login" placeholder="Username">
@@ -12,4 +12,7 @@
   </form>
   <button (click)="onSubmit()" [innerText]="currentAction"></button>
   <button (click)="switchForm()" [innerText]="currentTip"></button>
+</div>
+<div *ngIf="isAuthorized()">
+  <button class="btn btn-danger" [innerText]="'Выйти'" (click)="logout()"></button>
 </div>

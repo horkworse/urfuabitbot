@@ -1,0 +1,14 @@
+.wrapper{
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+}
+
+.container{
+  grid-column: 2;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.card-columns{
+  column-count: 2;
+}

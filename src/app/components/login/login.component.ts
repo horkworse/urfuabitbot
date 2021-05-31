@@ -16,6 +16,8 @@ export class LoginComponent implements OnInit {
   private _actionArray: Array<string> = ["Войти","Зарегистрироваться"]
   private _inviteActionArray: Array<string> = ["Вас нет в системе?", "Уже зарегистрированы?"]
   public currentTip: string;
+  private _isAuthorized: boolean;
+  private _authSubcription;
 
   constructor(private _formBuilder: FormBuilder, private _auth: AuthService) { }
 
@@ -32,6 +34,10 @@ export class LoginComponent implements OnInit {
       login: [null, [Validators.required]],
       password: [null, [Validators.minLength(8), Validators.required]]
     })
+    this._authSubcription = this._auth.isAuth.subscribe(result => {
+      this._isAuthorized = result
+    })
+    this._auth.isAuthenticated();
   }
 
   public switchForm(): void{
@@ -52,5 +58,13 @@ export class LoginComponent implements OnInit {
     if(!this.isLoginForm && this.signupForm.valid){
       this._auth.register(this.signupForm.value.login, this.signupForm.value.password, this.signupForm.value.inviteKey)
     }
+  }
+
+  isAuthorized() {
+    return this._isAuthorized
+  }
+
+  logout() {
+    this._auth.logout();
   }
 }
