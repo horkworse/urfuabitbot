@@ -24,7 +24,8 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
     BrowserModule,
     RouterModule.forRoot([
       { path: "", component: HomeComponent},
-      { path: "login", component: LoginComponent}
+      { path: "login", component: LoginComponent},
+      { path: "admin", component: AdminPanelComponent}
     ]),
     NgbModule,
     ReactiveFormsModule,

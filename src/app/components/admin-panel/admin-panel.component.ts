@@ -7,9 +7,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminPanelComponent implements OnInit {
 
-  constructor() { }
+  constructor() {
+
+  }
+
+  public getGovno(){
+    return {
+      text: "Shluha Helpopvna \n @id2982392(Zalupa Konskaya)"
+    }
+  }
 
   ngOnInit(): void {
+
   }
 
 }

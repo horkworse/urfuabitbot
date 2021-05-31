@@ -164,7 +164,7 @@ app.delete("/mentor/removeFromGroup/mentor=:mentor&group=:group", ensureAuthenti
   });
 })
 
-app.post("/mentor/addToGroup/mentor=:mentor&group=:group",async (req, res) => {
+app.post("/mentor/addToGroup/mentor=:mentor&group=:group", ensureAuthenticated,async (req, res) => {
   Group.getModel().find({_id: mongoose.Types.ObjectId(req.params.group)}).exec().then(async resultGroup => {
     if (resultGroup.length !== 0) {
       res.status(401).send({
@@ -192,7 +192,7 @@ app.get("/validate", ensureAuthenticated, (req, res)=>{
   res.status(200).json(true)
 })
 
-app.get("/mentor/getGroupByMentor/mentor=:mentor", async(req, res) =>{
+app.get("/mentor/getGroupByMentor/mentor=:mentor", ensureAuthenticated,async(req, res) =>{
   Mentor.getModel().find({ _id: mongoose.Types.ObjectId(req.params.mentor)}).exec().then( async result=>{
     if(!result)
       throw new Error();
@@ -200,7 +200,7 @@ app.get("/mentor/getGroupByMentor/mentor=:mentor", async(req, res) =>{
   }).catch(console.error)
 });
 
-app.post("/student/addStudentToGroup/group=:group", async(req, res) =>{
+app.post("/student/addStudentToGroup/group=:group", ensureAuthenticated,async(req, res) =>{
   Group.getModel().find({_id: mongoose.Types.ObjectId(req.params.group)}).exec().then(async resultGroup =>{
     if(!resultGroup)
       throw new Error();
