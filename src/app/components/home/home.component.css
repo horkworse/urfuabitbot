@@ -3,3 +3,15 @@
   grid-template-rows: 1fr 25fr;
   height: 98vh;
 }
+
+.container{
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: 4fr 20fr 4fr;
+}
+
+.form-container{
+  grid-column: 2;
+}
+
+

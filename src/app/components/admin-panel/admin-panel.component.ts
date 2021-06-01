@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import {StudentSearchComponent} from './children/student-search.web/student-search.web.component';
+import {MentorControlComponent} from './children/mentor-control/mentor-control.component';
 
 @Component({
   selector: 'app-admin-panel',
@@ -11,9 +12,8 @@ export class AdminPanelComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog
-  ) {
+  ) {}
 
-  }
 
   ngOnInit(): void {
 
@@ -26,5 +26,14 @@ export class AdminPanelComponent implements OnInit {
     dialogConfig.panelClass = 'container';
 
     this.dialog.open(StudentSearchComponent, dialogConfig)
+  }
+
+  public showAllStudent(){
+    const dialogConfig = new MatDialogConfig()
+    dialogConfig.autoFocus = true;
+    dialogConfig.hasBackdrop = true;
+    dialogConfig.panelClass = 'container';
+
+    this.dialog.open(MentorControlComponent, dialogConfig)
   }
 }
