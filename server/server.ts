@@ -198,34 +198,44 @@ app.get("/mentor/getGroupByMentor/mentor=:mentor", ensureAuthenticated,async(req
   }).catch(console.error)
 });
 
-app.post("/student/addStudentToGroup/group=:group", ensureAuthenticated,async(req, res) =>{
-  Group.getModel().find({_id: mongoose.Types.ObjectId(req.params.group)}).exec().then(async resultGroup =>{
+app.post("/student/addStudentToGroup", ensureAuthenticated, async(req, res) =>{
+  Group.getModel().find({mentors: mongoose.Types.ObjectId(req.user.mentor)}).exec().then(async resultGroup =>{
     if(!resultGroup)
       throw new Error();
-    let studentData:IStudent = JSON.parse(req.body)
+    let studentData:IStudent = req.body;
     Student.getModel().find({vkLink: studentData.vkLink}).exec().then(async resultStudent =>{
+      console.log(resultStudent)
       if(resultStudent.length !== 0){
         res.sendStatus(400).send({
           error: "SomeThing wrong"
         })
         throw new Error();
       }
+      let vkLinkDesc = studentData.vkLink.split('/');
       let newStudent = new Student({
         firstName: studentData.firstName,
         secondName: studentData.secondName,
-        institute: studentData.institute,
-        vkLink: studentData.vkLink,
-        fullname: studentData.fullname,
-        _id: studentData._id
+        institute: resultGroup[0].institute,
+        vkLink: vkLinkDesc[vkLinkDesc.length-1]
       })
       await newStudent.saveStudent();
-      resultGroup[0].students.push(newStudent[0]._id)
+      resultGroup[0].students.push(newStudent._id)
+      await resultGroup[0].saveGroup();
     }).catch(console.error);
   }).catch(console.error);
 });
 
 
-app.get("/student/getAll/lastIndex=:lastIndex&count=:count", ensureAuthenticated, (req, res)=>{})
+app.get("/student/getAll/lastIndex=:lastIndex&count=:count", ensureAuthenticated, (req, res)=>{
+  let q = parseInt(req.params.lastIndex);
+  let p = parseInt(req.params.count)
+  Student.getModel().find({},{response: {$slice: [q, p+q]}}).exec().then(result => {
+    if(result.length !== 0){
+      res.json(result);
+    }
+
+  })
+})
 
 app.get("/adminVerify", ensureAuthenticated, (req, res) => {
   res.send(req.user.admin);

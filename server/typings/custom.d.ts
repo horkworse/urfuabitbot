@@ -1,4 +1,4 @@
-import {IUser} from '../models/user';
+
 
 declare global{
   namespace Express {
@@ -6,4 +6,9 @@ declare global{
     user?: IUser
   }
 }
+}
+
+export interface IUser {
+  admin: boolean
+  mentor: string
 }

@@ -25,7 +25,7 @@ export class AdminPanelComponent implements OnInit {
     dialogConfig.hasBackdrop = true;
     dialogConfig.panelClass = 'container';
 
-    this.dialog.open(StudentSearchComponent, dialogConfig)
+    this.dialog.open(MentorControlComponent, dialogConfig)
   }
 
   public showAllStudent(){
@@ -34,6 +34,6 @@ export class AdminPanelComponent implements OnInit {
     dialogConfig.hasBackdrop = true;
     dialogConfig.panelClass = 'container';
 
-    this.dialog.open(MentorControlComponent, dialogConfig)
+    this.dialog.open(StudentSearchComponent, dialogConfig)
   }
 }
