@@ -227,6 +227,10 @@ app.post("/student/addStudentToGroup/group=:group", ensureAuthenticated,async(re
 
 app.get("/student/getAll/lastIndex=:lastIndex&count=:count", ensureAuthenticated, (req, res)=>{})
 
+app.get("/adminVerify", ensureAuthenticated, (req, res) => {
+  res.send(req.user.admin);
+})
+
 
 app.delete("/student/removeFromGroup/student=:student&group=:group", ensureAuthenticated, async (req,res) =>{
   Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
