@@ -248,6 +248,27 @@ app.delete("/student/removeFromGroup/student=:student&group=:group", ensureAuthe
   });
 })
 
+app.put("/student/changeUserInfo", async(req, res) =>{ 
+  let studentData:IStudent = JSON.parse(req.body) 
+  Student.getModel().find({vkLink: studentData.vkLink}).exec().then(async resultStudent =>{ 
+    if(resultStudent.length !== 0){ 
+      res.sendStatus(400).send({ 
+        error: "SomeThing wrong" 
+      }) 
+    throw new Error(); 
+  } 
+  let newStudent = new Student({ 
+    firstName: studentData.firstName, 
+    secondName: studentData.secondName, 
+    institute: req.body.institute, 
+    fullname: studentData.fullname, 
+    vkLink: req.body.vkLink, 
+    _id: req.body._id 
+  }) 
+  await newStudent.saveStudent() 
+  }).catch(console.error); 
+}); 
+
 app.get("bot/getMentors/group:=group", ensureAuthenticated, async (req, res) => {
   Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
     if (result.length !== 0) {
