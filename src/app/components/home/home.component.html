@@ -1,6 +1,28 @@
-<form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
-  <input formControlName="firstname" placeholder="Имя">
-  <input formControlName="secondname" placeholder="Фамилия">
-  <input formControlName="vkLink" placeholder="Ссылка на ВК">
-  <button (click)="onSubmit()" [innerText]="'Добавить'"></button>
-</form>
+<div class="wrapper">
+  <div class="container">
+    <div class="form-container">
+      <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+        <div class="form-group">
+          <div class="form-row">
+            <div class="col">
+              <label for="firstname">Имя студента</label>
+              <input class="form-control" formControlName="firstname" id="firstname" aria-describedby="help" placeholder="Василий">
+              <small id="help" class="form-text">Для ускорения заполнения используйте Tab</small>
+            </div>
+            <div class="col">
+              <label for="secondname">Фамилия</label>
+              <input class="form-control" formControlName="secondname" id="secondname" placeholder="Шлягин">
+            </div>
+          </div>
+          <div class="form-row mt-1">
+            <label for="vkLink">Ссылка на профиль ВК</label>
+            <input class="form-control" formControlName="vkLink" id="vkLink" placeholder="https://vk.com/daleudolo">
+          </div>
+          <div class="form-row mt-2">
+            <button class="btn btn-primary" (click)="onSubmit()">Добавить</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

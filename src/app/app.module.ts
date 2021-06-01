@@ -14,6 +14,7 @@ import { AdminPanelComponent } from './components/admin-panel/admin-panel.compon
 import { StudentSearchComponent } from './components/admin-panel/children/student-search.web/student-search.web.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
+import { MentorControlComponent } from './components/admin-panel/children/mentor-control/mentor-control.component';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dia
     NavigationComponent,
     LoginComponent,
     AdminPanelComponent,
-    StudentSearchComponent
+    StudentSearchComponent,
+    MentorControlComponent
   ],
   imports: [
     BrowserModule,
