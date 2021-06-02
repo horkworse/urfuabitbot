@@ -1,5 +1,6 @@
 {
   "ConnectionStrings": {
-    "token" : "888b76b3a560fdb4c3387d59958fb4205bd2a75ed3d5a4ebf63812f0315e61dfa12c308b2f30725fd7dcd"
+    "token" : "888b76b3a560fdb4c3387d59958fb4205bd2a75ed3d5a4ebf63812f0315e61dfa12c308b2f30725fd7dcd",
+    "url" : "127.0.0.1:5000/"
   }
 }

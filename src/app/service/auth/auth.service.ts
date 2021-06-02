@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import {ApiService} from '../data/api/api.service';
-import {Subject, Subscription} from 'rxjs';
+import {Subject, Subscription, timer} from 'rxjs';
 import {Router} from '@angular/router';
 import {resolve} from '@angular/compiler-cli/src/ngtsc/file_system';
 
@@ -15,16 +15,24 @@ export class AuthService {
   constructor(private _api: ApiService, private _router: Router) {
     this.nameSubject = new Subject<string>();
     this.isAuth = new Subject<boolean>()
+    this.isAuthenticated();
   }
 
   public isAuthenticated():void{
-    if(localStorage.getItem('token')){
-      this.validationSub = this._api.validateToken().subscribe(result => {
-        this.isAuth.next(result)
-      },err => {},() => {
-        console.log("Validate executed")
-        this.validationSub.unsubscribe()})
-    }
+    const source = timer(50);
+    const subs = source.subscribe(value => {
+      if(localStorage.getItem('token')){
+        this.validationSub = this._api.validateToken().subscribe(result => {
+          this.isAuth.next(result)
+        },err => { console.error()
+        },() => {
+          console.log("Validate executed")
+          this.validationSub.unsubscribe()})
+      }
+      else {
+        this.isAuth.next(false)
+      }
+    })
   }
 
   public logout(){

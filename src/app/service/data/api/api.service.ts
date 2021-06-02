@@ -11,7 +11,6 @@ export class ApiService {
 
   constructor(private _http: HttpClient, @Inject('BASE_URL') private _baseUrl: string) {
     if(localStorage.getItem("token")){
-      debugger
       this.setupHeaders();
     }
     console.log(`Sending request to ${this._baseUrl}`)
@@ -45,5 +44,13 @@ export class ApiService {
   public sendStudent(student: IStudent): Observable<any> {
     console.log("Sending")
     return this._http.post(this._baseUrl+"student/addStudentToGroup", student, {headers: this._tokenHeader});
+  }
+
+  public isAdmin(): Observable<boolean> {
+    return this._http.get<boolean>(this._baseUrl+"adminVerify", {headers: this._tokenHeader});
+  }
+
+  public getAllStudent(): Observable<IStudent[]>{
+    return this._http.get<IStudent[]>(this._baseUrl+"student/getAll/", {headers: this._tokenHeader});
   }
 }

@@ -30,6 +30,28 @@ export class UserController {
   public static
 }
 
+export function isValid(req){
+  if (!req.headers.authorization){
+    return false
+  }
+  let token = req.headers.authorization.split(' ')[1];
+
+  let payload = null;
+  try {
+    payload = jwt.verify(token, options.secret);
+  }
+  catch (err) {
+    return false
+  }
+
+  if(moment(payload.expire).unix() <= moment().unix()){
+    console.log(payload.expire - moment().unix())
+    return false
+  }
+
+  return true
+}
+
 export function ensureAuthenticated(req,res,next){
   if (!req.headers.authorization){
     return res.status(401).send({error: "TokenMissing"})

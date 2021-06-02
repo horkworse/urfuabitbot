@@ -1,6 +1,14 @@
 {
   "name": "satellite",
   "version": "0.0.0",
+  "watch": {
+    "serverBack": {
+      "patterns": [
+        "server"
+      ],
+      "extensions": "ts"
+    }
+  },
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -13,7 +21,8 @@
     "VK-BnR": "npm run botBuild & npm run botStart",
     "serverBuild": "npx tsc --project ./server/tsconfig.json",
     "serverRun": "node ./server/srv/server.js",
-    "serverBack": "npm run serverBuild & npm run serverRun"
+    "serverBack": "npm run serverBuild & npm run serverRun",
+    "startProd": "npx ng build --prod & lite-server --baseDir='./dist/Satellite'"
   },
   "private": true,
   "dependencies": {
@@ -36,15 +45,18 @@
     "@types/mongodb": "^3.6.12",
     "@vk-io/scenes": "^1.0.0",
     "@vk-io/session": "^2.0.0",
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.1",
     "bootstrap": "^4.5.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "hash-it": "^5.0.0",
     "jsonwebtoken": "^8.5.1",
+    "lite-server": "^2.6.1",
     "moment": "^2.29.1",
     "mongodb": "^3.6.6",
     "mongoose": "^5.10.18",
+    "npm-watch": "^0.9.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
     "vk-io": "^4.1.4",

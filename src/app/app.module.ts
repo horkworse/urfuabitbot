@@ -15,6 +15,8 @@ import { StudentSearchComponent } from './components/admin-panel/children/studen
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dialog';
 import { MentorControlComponent } from './components/admin-panel/children/mentor-control/mentor-control.component';
+import {AuthGuardGuard} from './guard/auth-guard.guard';
+import {AdminGuardGuard} from './guard/admin-guard.guard';
 
 @NgModule({
   declarations: [
@@ -29,9 +31,9 @@ import { MentorControlComponent } from './components/admin-panel/children/mentor
   imports: [
     BrowserModule,
     RouterModule.forRoot([
-      { path: "", component: HomeComponent},
+      { path: "", component: HomeComponent, canActivate: [AuthGuardGuard], },
       { path: "login", component: LoginComponent},
-      { path: "admin", component: AdminPanelComponent}
+      { path: "admin", component: AdminPanelComponent, canActivate: [AdminGuardGuard]}
     ]),
     NgbModule,
     ReactiveFormsModule,
