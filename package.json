@@ -22,7 +22,7 @@
     "serverBuild": "npx tsc --project ./server/tsconfig.json",
     "serverRun": "node ./server/srv/server.js",
     "serverBack": "npm run serverBuild & npm run serverRun",
-    "runProduction": "npx ng build --prod & npx lite-sever --baseDir='dist/out-tsc'"
+    "startProd": "npx ng build --prod & lite-server --baseDir='./dist/Satellite'"
   },
   "private": true,
   "dependencies": {
