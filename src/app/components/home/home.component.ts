@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {ApiService} from '../../service/data/api/api.service';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {IStudent} from '../../../../server/models/student';
 
 @Component({
   selector: 'app-home',
@@ -14,13 +15,30 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.studentForm = this._formBuilder.group({
-      firstname: [null, []],
-      secondname: [null, []],
-      vkLink: [null, []],
+      firstname: [null, [Validators.required]],
+      secondname: [null, [Validators.required]],
+      vkLink: [null, [Validators.required]]
     })
+
+    this.studentForm.statusChanges.subscribe(x=>console.log(x))
+    this.studentForm.valueChanges.subscribe(x=>console.log(x))
   }
 
   public onSubmit() {
+    if(!this.studentForm.valid){
+      console.log("Error")
 
+      return
+    }
+    console.log({
+      firstName: this.studentForm.value.firstName,
+      secondName: this.studentForm.value.secondName,
+      vkLink: this.studentForm.value.vkLink
+    })
+    this._api.sendStudent(<IStudent>{
+      firstName: this.studentForm.value.firstname,
+      secondName: this.studentForm.value.secondname,
+      vkLink: this.studentForm.value.vkLink
+    }).subscribe(x=>console.log(x))
   }
 }

@@ -1,22 +1,22 @@
 <div class="wrapper">
   <div class="container">
     <div class="form-container">
-      <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="studentForm">
         <div class="form-group">
           <div class="form-row">
             <div class="col">
-              <label for="firstname">Имя студента</label>
-              <input class="form-control" formControlName="firstname" id="firstname" aria-describedby="help" placeholder="Василий">
+              <label for="frst">Имя студента</label>
+              <input class="form-control" formControlName="firstname" id="frst" aria-describedby="help" placeholder="Василий">
               <small id="help" class="form-text">Для ускорения заполнения используйте Tab</small>
             </div>
             <div class="col">
-              <label for="secondname">Фамилия</label>
-              <input class="form-control" formControlName="secondname" id="secondname" placeholder="Шлягин">
+              <label for="scn">Фамилия</label>
+              <input class="form-control" formControlName="secondname" id="scn" placeholder="Шлягин">
             </div>
           </div>
           <div class="form-row mt-1">
-            <label for="vkLink">Ссылка на профиль ВК</label>
-            <input class="form-control" formControlName="vkLink" id="vkLink" placeholder="https://vk.com/daleudolo">
+            <label for="cvl">Ссылка на профиль ВК</label>
+            <input class="form-control" formControlName="vkLink" id="cvl" placeholder="https://vk.com/daleudolo">
           </div>
           <div class="form-row mt-2">
             <button class="btn btn-primary" (click)="onSubmit()">Добавить</button>
