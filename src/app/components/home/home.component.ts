@@ -19,9 +19,6 @@ export class HomeComponent implements OnInit {
       secondname: [null, [Validators.required]],
       vkLink: [null, [Validators.required]]
     })
-
-    this.studentForm.statusChanges.subscribe(x=>console.log(x))
-    this.studentForm.valueChanges.subscribe(x=>console.log(x))
   }
 
   public onSubmit() {
@@ -30,15 +27,11 @@ export class HomeComponent implements OnInit {
 
       return
     }
-    console.log({
-      firstName: this.studentForm.value.firstName,
-      secondName: this.studentForm.value.secondName,
-      vkLink: this.studentForm.value.vkLink
-    })
     this._api.sendStudent(<IStudent>{
       firstName: this.studentForm.value.firstname,
       secondName: this.studentForm.value.secondname,
       vkLink: this.studentForm.value.vkLink
-    }).subscribe(x=>console.log(x))
+    })
+    this.studentForm.reset();
   }
 }

@@ -6,17 +6,23 @@
           <div class="form-row">
             <div class="col">
               <label for="frst">Имя студента</label>
-              <input class="form-control" formControlName="firstname" id="frst" aria-describedby="help" placeholder="Василий">
+              <input class="form-control" formControlName="firstname"
+                     id="frst" aria-describedby="help" placeholder="Василий"
+                     [ngClass]="this.studentForm.controls.firstname.valid? 'is-valid':''">
               <small id="help" class="form-text">Для ускорения заполнения используйте Tab</small>
             </div>
             <div class="col">
               <label for="scn">Фамилия</label>
-              <input class="form-control" formControlName="secondname" id="scn" placeholder="Шлягин">
+              <input class="form-control" formControlName="secondname"
+                     [ngClass]="this.studentForm.controls.secondname.valid? 'is-valid':''"
+                     id="scn" placeholder="Шлягин">
             </div>
           </div>
           <div class="form-row mt-1">
             <label for="cvl">Ссылка на профиль ВК</label>
-            <input class="form-control" formControlName="vkLink" id="cvl" placeholder="https://vk.com/daleudolo">
+            <input class="form-control" formControlName="vkLink"
+                   [ngClass]="this.studentForm.controls.vkLink.valid? 'is-valid':''"
+                   id="cvl" placeholder="https://vk.com/daleudolo">
           </div>
           <div class="form-row mt-2">
             <button class="btn btn-primary" (click)="onSubmit()">Добавить</button>
