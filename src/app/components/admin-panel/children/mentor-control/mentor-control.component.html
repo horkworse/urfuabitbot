@@ -1,4 +1,58 @@
 <h1 mat-dialog-title>Добавление нового наставника</h1>
 <div mat-dialog-content>
-  Здесь должна быть форма, но всем пока что похуй
+  <form *ngIf="isFirstStage" [formGroup]="newMentorForm">
+    <div class="form-group">
+      <div class="form-row">
+        <div class="col">
+          <label for="frst">Имя наставника</label>
+          <input class="form-control" formControlName="firstName"
+                 id="frst" placeholder="Никита" autocomplete="off"
+                 [inputValidation]="newMentorForm">
+        </div>
+        <div class="col">
+          <label for="scnd">Фамилия наставника</label>
+          <input class="form-control" formControlName="secondName"
+                 id="scnd" placeholder="Альтернативный" autocomplete="off"
+                 [inputValidation]="newMentorForm">
+        </div>
+      </div>
+      <div class="form-row mt-1">
+        <label for="cvl">Ссылка на профиль ВК</label>
+        <input class="form-control" formControlName="vkLink"
+               [inputValidation]="newMentorForm" autocomplete="off"
+               id="cvl" placeholder="https://vk.com/axelunixal">
+      </div>
+      <div class="form-row mt-1">
+        <div class="col">
+          <label for="inst">Институт</label>
+          <input class="form-control" formControlName="institute"
+                 [inputValidation]="newMentorForm" autocomplete="off"
+                 id="inst" placeholder="ИРИТ-РтФ">
+        </div>
+        <div class="col">
+          <label for="grp">Наименование группы</label>
+          <input class="form-control" formControlName="group"
+                 [inputValidation]="newMentorForm" autocomplete="off"
+                 id="grp" placeholder="РИ-110020">
+        </div>
+      </div>
+      <div class="form-row mt-4 justify-content-end">
+        <button class="btn btn-primary " (click)="onSubmit()">Добавить</button>
+      </div>
+    </div>
+  </form>
+  <div *ngIf="!isFirstStage" class="">
+    <div class="input-group row">
+      <div class="input-group-prepend">
+        <span class="input-group-text">KEY:</span>
+      </div>
+      <input class="form-control" placeholder="Дожидаемся ключа...">
+      <div class="input-group-append">
+        <span class="input-group-text btn-primary">Скопировать</span>
+      </div>
+    </div>
+    <div class="row mt-2 mr-2 justify-content-end">
+      <button class="btn btn-primary" (click)="onSubmit()">Добавить ещё</button>
+    </div>
+  </div>
 </div>

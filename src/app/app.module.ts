@@ -17,6 +17,7 @@ import {MAT_DIALOG_DEFAULT_OPTIONS, MatDialogModule} from '@angular/material/dia
 import { MentorControlComponent } from './components/admin-panel/children/mentor-control/mentor-control.component';
 import {AuthGuardGuard} from './guard/auth-guard.guard';
 import {AdminGuardGuard} from './guard/admin-guard.guard';
+import { InputValidationDirective } from './directive/input-validation.directive';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,8 @@ import {AdminGuardGuard} from './guard/admin-guard.guard';
     LoginComponent,
     AdminPanelComponent,
     StudentSearchComponent,
-    MentorControlComponent
+    MentorControlComponent,
+    InputValidationDirective
   ],
   imports: [
     BrowserModule,

@@ -3,6 +3,7 @@ import {ApiService} from '../data/api/api.service';
 import {Subject, Subscription, timer} from 'rxjs';
 import {Router} from '@angular/router';
 import {resolve} from '@angular/compiler-cli/src/ngtsc/file_system';
+import {catchError} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -54,9 +55,7 @@ export class AuthService {
 
   public register(login: string, password: string, inviteKey: string){
     this._api.signup(login, password,inviteKey).subscribe(res => {
-      console.log(res)
-      this._router.navigate(['login'])
+      this._router.navigate([''])
     })
-
   }
 }

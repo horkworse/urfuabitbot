@@ -9,6 +9,7 @@ import {AuthService} from "../../../../service/auth/auth.service";
 })
 export class MentorControlComponent implements OnInit {
   public  newMentorForm: FormGroup
+  public isFirstStage: boolean = true;
 
   constructor(private _formBuilder: FormBuilder, private _auth: AuthService) { }
 
@@ -20,5 +21,9 @@ export class MentorControlComponent implements OnInit {
       vkLink: [null, [Validators.required]],
       group: [null, [Validators.required]]
     })
+  }
+
+  onSubmit() {
+    this.isFirstStage = !this.isFirstStage
   }
 }
