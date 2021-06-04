@@ -25,9 +25,9 @@
       <div class="form-row mt-1">
         <div class="col">
           <label for="inst">Институт</label>
-          <input class="form-control" formControlName="institute"
-                 [inputValidation]="newMentorForm" autocomplete="off"
-                 id="inst" placeholder="ИРИТ-РтФ">
+          <select class="form-control" formControlName="institute" id="inst">
+            <option *ngFor="let data of institutes" [innerText]="data.name" [value]="data.index"></option>
+          </select>
         </div>
         <div class="col">
           <label for="grp">Наименование группы</label>
@@ -46,9 +46,9 @@
       <div class="input-group-prepend">
         <span class="input-group-text">KEY:</span>
       </div>
-      <input class="form-control" placeholder="Дожидаемся ключа...">
+      <input class="form-control" placeholder="Дожидаемся ключа..." [value]="keyMessage">
       <div class="input-group-append">
-        <span class="input-group-text btn-primary">Скопировать</span>
+        <span class="input-group-text btn-primary" (click)="copyKey()">Скопировать</span>
       </div>
     </div>
     <div class="row mt-2 mr-2 justify-content-end">

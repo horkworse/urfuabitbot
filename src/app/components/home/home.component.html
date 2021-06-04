@@ -29,6 +29,23 @@
           </div>
         </div>
       </form>
+      <div class="table-wrapper">
+        <table class="table tableFixHead">
+          <thead>
+          <tr>
+            <th scope="col">ФИ</th>
+            <th scope="col">ВК</th>
+            <th scope="col">Изменить данные</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let student of studentStorage">
+            <th scope="row" [innerText]="student.fullname"></th>
+            <th><a [href]="'https://vk.com/'+student.vkLink" [innerText]="'https://vk.com/'+student.vkLink"></a></th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

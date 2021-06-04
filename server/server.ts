@@ -61,7 +61,7 @@ app.post('/signup/:inviteKey', (req, res) => {
       return res.sendStatus(204);
     });
   });
-});
+}); //Works
 
 app.post('/signin/', (req, res) => {
   if (isEmpty(req.body)) {
@@ -85,7 +85,7 @@ app.post('/signin/', (req, res) => {
       return res.send({error: 'Not correct password'});
     }
   });
-});
+}); //Works
 
 app.post('/createNewUser', ensureAuthenticated, async (req, res) => {
   if (!req.user.admin) {
@@ -105,7 +105,7 @@ app.post('/createNewUser', ensureAuthenticated, async (req, res) => {
     group: undefined
   });
   Group.getModel().find({groupIndex: groupInfo.groupIndex}).exec().then(async result => {
-    if (!result) {
+    if (result.length === 0) {
       await mentor.saveMentor();
       let group = await new Group([mentor], mentor.institute, groupInfo.groupIndex);
       await group.saveGroup();
@@ -114,7 +114,7 @@ app.post('/createNewUser', ensureAuthenticated, async (req, res) => {
       await group.saveGroup();
       await mentor.saveMentor();
     } else {
-      if (result.length != 1) {
+      if (result.length !== 1) {
         throw new Error('Collision on group select');
       }
       let group = result[0];
@@ -125,7 +125,7 @@ app.post('/createNewUser', ensureAuthenticated, async (req, res) => {
     }
     let user = new User(mentor.getHashCode().toString(), mentor);
     user.saveUser().catch(console.error);
-    res.sendStatus(200);
+    res.status(200).send(user.inviteKey);
   }).catch(console.error);
   /*
   InputJson:
@@ -141,7 +141,15 @@ app.post('/createNewUser', ensureAuthenticated, async (req, res) => {
          }}
     ]
    */
-});
+}); //Works
+
+app.get('/validate', (req, res) => {
+  res.status(200).json(isValid(req));
+}); //Works
+
+app.get('/adminVerify', ensureAuthenticated, (req, res) => {
+  res.send(req.user.admin);
+}); //Works
 
 app.delete('/mentor/removeFromGroup/mentor=:mentor&group=:group', ensureAuthenticated, async (req, res) => {
   Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
@@ -168,7 +176,7 @@ app.delete('/mentor/removeFromGroup/mentor=:mentor&group=:group', ensureAuthenti
     await result[0].saveMentor();
     res.sendStatus(200);
   });
-});
+}); //AWAITING
 
 app.post('/mentor/addToGroup/mentor=:mentor&group=:group', ensureAuthenticated, async (req, res) => {
   Group.getModel().find({_id: mongoose.Types.ObjectId(req.params.group)}).exec().then(async resultGroup => {
@@ -191,11 +199,7 @@ app.post('/mentor/addToGroup/mentor=:mentor&group=:group', ensureAuthenticated, 
       await resultMentor[0].saveMentor();
     });
   });
-});
-
-app.get('/validate', (req, res) => {
-  res.status(200).json(isValid(req));
-});
+}); //Works
 
 app.get('/mentor/getGroupByMentor/mentor=:mentor', ensureAuthenticated, async (req, res) => {
   Mentor.getModel().find({_id: mongoose.Types.ObjectId(req.params.mentor)}).exec().then(async result => {
@@ -207,18 +211,19 @@ app.get('/mentor/getGroupByMentor/mentor=:mentor', ensureAuthenticated, async (r
 });
 
 app.post('/student/addStudentToGroup', ensureAuthenticated, async (req, res) => {
+  console.log(`[DB] Executed AddStudent() - data: ${req.body}`)
   Group.getModel().find({mentors: mongoose.Types.ObjectId(req.user.mentor)}).exec().then(async resultGroup => {
-    if (!resultGroup) {
-      throw new Error();
+    if (resultGroup.length === 0) {
+      throw new Error("AddStudent() Error: No group");
     }
     let studentData: IStudent = req.body;
     Student.getModel().find({vkLink: studentData.vkLink}).exec().then(async resultStudent => {
       console.log(resultStudent);
       if (resultStudent.length !== 0) {
         res.sendStatus(400).send({
-          error: 'SomeThing wrong'
+          error: 'AddStudent() Error: Student already exist!'
         });
-        throw new Error();
+        throw new Error(`AddStudent() Error: Student already exist! data:  ${resultStudent}`);
       }
       let vkLinkDesc = studentData.vkLink.split('/');
       let newStudent = new Student({
@@ -230,10 +235,10 @@ app.post('/student/addStudentToGroup', ensureAuthenticated, async (req, res) => 
       await newStudent.saveStudent();
       resultGroup[0].students.push(newStudent._id);
       await resultGroup[0].saveGroup();
+      res.status(200).send({data:"help"})
     }).catch(console.error);
   }).catch(console.error);
-});
-
+}); //Works
 
 app.get('/student/getAll/lastIndex=:lastIndex&count=:count', ensureAuthenticated, (req, res) => {
   let q = parseInt(req.params.lastIndex);
@@ -244,7 +249,7 @@ app.get('/student/getAll/lastIndex=:lastIndex&count=:count', ensureAuthenticated
     }
 
   });
-});
+}); //DEPRECATED
 
 app.get('/student/getAll/', ensureAuthenticated, (req, res) => {
 
@@ -253,12 +258,19 @@ app.get('/student/getAll/', ensureAuthenticated, (req, res) => {
       res.json(result);
     }
   });
-});
+}); //Works
 
-app.get('/adminVerify', ensureAuthenticated, (req, res) => {
-  res.send(req.user.admin);
-});
+app.get('/student/getByGroup', ensureAuthenticated, (req, res) => {
+  Group.getModel().find({mentors: mongoose.Types.ObjectId(req.user.mentor)}).exec().then(async resultGroup => {
+    if (resultGroup.length === 0) {
+      throw new Error("getByGroup() Error: No group");
+    }
+    Student.getModel().find({_id: {$in: resultGroup[0].students}}).exec().then(groupStudents => {
+      res.json(groupStudents)
+    })
+  })
 
+}) //Works
 
 app.delete('/student/removeFromGroup/student=:student&group=:group', ensureAuthenticated, async (req, res) => {
   Group.getModel().find({groupIndex: req.params.group}).exec().then(async result => {
@@ -274,7 +286,7 @@ app.delete('/student/removeFromGroup/student=:student&group=:group', ensureAuthe
     await result[0].saveGroup();
     res.sendStatus(200);
   });
-});
+}); //AWAITING
 
 app.get('/bot/getMentors/group=:group', async (req, res) => {
   Group.getModel().find({groupIndex: req.params.group}).exec().then(async groupResult => {
@@ -300,4 +312,4 @@ app.get('/bot/getMentors/group=:group', async (req, res) => {
       })
     })
   })
-})
+}) //AWAITING
