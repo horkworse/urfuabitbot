@@ -6,21 +6,26 @@
       </div>
       <div *ngIf="!isAuthorized()">
         <div class="form-group"></div>
-        <form *ngIf="isLoginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="">
+        <form *ngIf="isLoginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <p class="form-text text-info">Вход в систему</p>
           <div class="form-row mb-2">
-            <input class="form-control col mr-2" formControlName="login" placeholder="Username">
-            <input class="form-control col" formControlName="password" placeholder="Password" type="password">
+            <input class="form-control col mr-2" [inputValidation]="loginForm" formControlName="login"
+                   placeholder="Username">
+            <input class="form-control col" formControlName="password" [inputValidation]="loginForm"
+                   placeholder="Password" type="password" (keyup.enter)="onSubmit()">
           </div>
         </form>
         <form *ngIf="!isLoginForm" [formGroup]="signupForm" class="">
           <p class="form-text text-info">Регистрация</p>
           <div class="form-row mb-2">
-            <input class="form-control" formControlName="inviteKey" placeholder="Invite Key">
+            <input class="form-control" formControlName="inviteKey" [inputValidation]="signupForm"
+                   placeholder="Invite Key">
           </div>
           <div class="form-row mb-2">
-            <input class="form-control col mr-2" formControlName="login" placeholder="Username">
-            <input class="form-control col" formControlName="password" placeholder="Password" type="password">
+            <input class="form-control col mr-2" formControlName="login" [inputValidation]="signupForm"
+                   placeholder="Username">
+            <input class="form-control col" formControlName="password" [inputValidation]="signupForm"
+                   placeholder="Password" (keyup.enter)="onSubmit()" type="password">
           </div>
         </form>
         <div class="flex-rr">

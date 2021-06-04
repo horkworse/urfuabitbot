@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
       password: [null, [Validators.minLength(8), Validators.required]]
     })
     this.signupForm = this._formBuilder.group({
-      inviteKey: [null, [Validators.required]],
+      inviteKey: [null, [Validators.required, Validators.minLength(14)]],
       login: [null, [Validators.required]],
       password: [null, [Validators.minLength(8), Validators.required]]
     })
@@ -52,7 +52,6 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if(this.isLoginForm && this.loginForm.valid){
-      console.log(this.loginForm.controls)
       this._auth.authenticate(this.loginForm.value.login, this.loginForm.value.password)
     }
     if(!this.isLoginForm && this.signupForm.valid){

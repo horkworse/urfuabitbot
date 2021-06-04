@@ -24,6 +24,8 @@ export class AdminPanelComponent implements OnInit {
     dialogConfig.autoFocus = true;
     dialogConfig.hasBackdrop = true;
     dialogConfig.panelClass = 'container';
+    dialogConfig.minWidth = '726px';
+    dialogConfig.maxWidth = '50vw';
 
     this.dialog.open(MentorControlComponent, dialogConfig)
   }

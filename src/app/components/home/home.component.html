@@ -8,27 +8,44 @@
               <label for="frst">Имя студента</label>
               <input class="form-control" formControlName="firstname"
                      id="frst" aria-describedby="help" placeholder="Василий"
-                     [ngClass]="this.studentForm.controls.firstname.valid? 'is-valid':''">
+                     [inputValidation]="studentForm" autocomplete="off">
               <small id="help" class="form-text">Для ускорения заполнения используйте Tab</small>
             </div>
             <div class="col">
               <label for="scn">Фамилия</label>
               <input class="form-control" formControlName="secondname"
-                     [ngClass]="this.studentForm.controls.secondname.valid? 'is-valid':''"
+                     [inputValidation]="studentForm" autocomplete="off"
                      id="scn" placeholder="Шлягин">
             </div>
           </div>
           <div class="form-row mt-1">
             <label for="cvl">Ссылка на профиль ВК</label>
             <input class="form-control" formControlName="vkLink"
-                   [ngClass]="this.studentForm.controls.vkLink.valid? 'is-valid':''"
+                   [inputValidation]="studentForm" autocomplete="off"
                    id="cvl" placeholder="https://vk.com/daleudolo">
           </div>
-          <div class="form-row mt-2">
+          <div class="form-row mt-2 justify-content-end">
             <button class="btn btn-primary" (click)="onSubmit()">Добавить</button>
           </div>
         </div>
       </form>
+      <div class="table-wrapper">
+        <table class="table tableFixHead">
+          <thead>
+          <tr>
+            <th scope="col">ФИ</th>
+            <th scope="col">ВК</th>
+            <th scope="col">Изменить данные</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let student of studentStorage">
+            <th scope="row" [innerText]="student.fullname"></th>
+            <th><a [href]="'https://vk.com/'+student.vkLink" [innerText]="'https://vk.com/'+student.vkLink"></a></th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </div>

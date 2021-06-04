@@ -2,6 +2,8 @@ import {Inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {IStudent} from '../../../../../server/models/student';
+import {IGroupIndex, INewMentor} from '../../../components/admin-panel/children/mentor-control/new-user.interface';
+import {tap} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -43,7 +45,7 @@ export class ApiService {
 
   public sendStudent(student: IStudent): Observable<any> {
     console.log("Sending")
-    return this._http.post(this._baseUrl+"student/addStudentToGroup", student, {headers: this._tokenHeader});
+    return this._http.post<void>(this._baseUrl+"student/addStudentToGroup/", student, {headers: this._tokenHeader});
   }
 
   public isAdmin(): Observable<boolean> {
@@ -52,5 +54,13 @@ export class ApiService {
 
   public getAllStudent(): Observable<IStudent[]>{
     return this._http.get<IStudent[]>(this._baseUrl+"student/getAll/", {headers: this._tokenHeader});
+  }
+
+  newUser(newMentor: INewMentor, indexGroup: IGroupIndex) {
+    return this._http.post<number>(this._baseUrl+"createNewUser", [newMentor, indexGroup], {headers: this._tokenHeader});
+  }
+
+  getStudentsByGroup() {
+    return this._http.get<IStudent[]>(this._baseUrl+'student/getByGroup', {headers: this._tokenHeader});
   }
 }
