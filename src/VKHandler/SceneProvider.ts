@@ -29,6 +29,7 @@ enum Steps {
   findMentor,
   mentorRTF,
   mentorINMT,
+  mentorINFO,
   resolveMentor,
   infoMenu,
   entryHostelInfo,
@@ -38,6 +39,7 @@ enum Steps {
 }
 
 class SceneProvider {
+
   constructor(sm: SceneManager) {
     sm.addScenes([this.scene]);
   }
@@ -88,10 +90,18 @@ class SceneProvider {
             },
             color: ButtonColor.PRIMARY
           })
+          .row()
           .textButton({
             label: 'ИНМиТ',
             payload: {
               command: Steps.mentorINMT
+            },
+            color: ButtonColor.PRIMARY
+          })
+          .textButton({
+            label: 'ИнФО',
+            payload: {
+              command: Steps.mentorINFO
             },
             color: ButtonColor.PRIMARY
           })
@@ -122,24 +132,38 @@ class SceneProvider {
   private async mentorINMT(context: IStepContext) {
     if (context.scene.step.firstTime) {
       return context.send({
-        message: 'Для того чтобы найти наставника, введите номер группы в формате:"МТ-110023"',
-        keyboard: Keyboard.builder()
-          .textButton({
-            label: 'В главное меню',
-            payload: {
-              command: Steps.main
-            },
-            color: ButtonColor.SECONDARY
-          })
-          .oneTime().inline()
+        message: 'Для того чтобы найти наставника, введите номер группы в формате:"МТ-110023"'
       });
     }
-    return context.scene.step.go(context.messagePayload['command']);
+
+    return context.scene.step.go(Steps.resolveMentor);
+  }
+
+  private async mentorINFO(context: IStepContext) {
+    if (context.scene.step.firstTime) {
+      return context.send({
+        message: 'Для того чтобы найти наставника, введите номер группы в формате:"ФО-110023"'
+      });
+    }
+
+    return context.scene.step.go(Steps.resolveMentor);
   }
 
   private async resolveMentor(context: IStepContext) {
     if (context.scene.step.firstTime) {
       let groupIndex = context.text;
+      if (groupIndex !== /^(РИ|ФO|МТ)-\d{6}/gi)
+        return context.send({
+          message: "Некорректный номер группы",
+          keyboard: Keyboard.builder()
+            .textButton({
+              label: 'В главное меню',
+              payload: {
+                command: Steps.main
+              },
+              color: ButtonColor.SECONDARY
+            }).oneTime().inline()
+          })
       console.log(groupIndex);
       return ax.get("http://localhost:5000/"+encodeURI(`bot/getMentors/group=${groupIndex}`)).then(res => {
         console.log(res);
@@ -205,41 +229,38 @@ class SceneProvider {
   private async entryHostelInfo(context: IStepContext) {
     if (context.scene.step.firstTime) {
       return context.send({
-        message: 'Тебе нужно:\n' +
-          '1) Пройти медкомиссию в Медсанчасти УрФУ(ул. Комсомольская, 59)\n' +
-          'Не забудь взять:\n -паспорт + копия\n -мед. полис + копия\n -справка 086у\n -прививочный сертификат\n -флюрография не более 1 года (можно сделать в мсч)\n\n' +
-          'а) Предъявить в регистратуру перечисленные документы\n' +
-          'б) Оплатить стоимость медосмотра в кассе или через сервис pay.urfu.ru\n' +
-          'в) Пройти осмотр у терапевта и предъявить ему квитанцию об оплате\n\n' +
-          '2) Получить выписку из протокола Комиссии Университета (ордер) и договор найма жилого помещения в общежитии (3 экземпляра)\n\n' +
-          '3) Оплатить общежитие\nПроизвести оплату можно 5 способами:\n ' +
-          '-pay.urfu.ru\n' +
-          ' -отделение СКБ-Банка\n' +
-          ' -бухгалтерия Студгородка УрФУ\n' +
-          ' -в отделении Сбербанка\n' +
-          ' -через приложение Сбербанк Онлайн\n\n' +
-          '4) Оформить временную регистрацию по месту пребывания.\n' +
-          'Нужно пройти в Паспортный отдел Студгородка университета со следующими документами:\n' +
-          ' -паспорт\n' +
-          ' -доровор найма жилого помещения (3 экземпляра)\n' +
-          ' -выписка из протокола Комиссии Университета (ордер)\n\n' +
-          '5) Оформить проживание Идем в общежитие, указанное в выписке из ордера со следующими документами:\n' +
-          ' -выписка из протокола Комиссии Университета (ордер)\n' +
-          ' -договор найма жилого помещения в 2х экземплярах (один с отметкой паспортного стола - отдается зав. общежитием, второй остатеся у студента)\n' +
-          '-фотографии 3х4см 6шт и фотографии в\n' +
-          ' -оформленная медицинская карта\n' +
-          ' -квитанция об оплате общежития\n',
-        keyboard: Keyboard.builder()
-          .textButton({
-            label: 'В главное меню',
-            payload: {
-              command: Steps.main,
+        message: "Поселение в общежитие",
+        template: JSON.stringify({
+          type : "carousel",
+            elements: [{
+              photo_id: "-109837093_457242811",
+              action: {
+                "type": "open_photo"
+              },
+              buttons: [{
+                action: {
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
+              }]
             },
-            color: ButtonColor.SECONDARY
+              {
+                photo_id: "-109837093_457242811",
+                action: {
+                  "type": "open_photo"
+                },
+                buttons: [{
+                  action: {
+                    type: "text",
+                    label: "В главное меню",
+                    payload: {command: Steps.main}
+                  }
+                }]
+              }]
           })
-          .oneTime()
-      });
-    }
+        })
+      }
     return context.scene.step.go(context.messagePayload['command']);
   }
 
@@ -292,7 +313,6 @@ class SceneProvider {
     return context.scene.step.go(0);
   }
 
-
   private async whoIsMentor(context: IStepContext) {
     if (context.scene.step.firstTime) {
       return context.send({
@@ -317,6 +337,7 @@ class SceneProvider {
     this.findMentorMenu,
     this.mentorRTF,
     this.mentorINMT,
+    this.mentorINFO,
     this.resolveMentor,
     this.infoMenu,
     this.entryHostelInfo,
