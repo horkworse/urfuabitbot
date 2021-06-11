@@ -42,6 +42,7 @@
           <tr *ngFor="let student of studentStorage">
             <th scope="row" [innerText]="student.fullname"></th>
             <th><a [href]="'https://vk.com/'+student.vkLink" [innerText]="'https://vk.com/'+student.vkLink"></a></th>
+            <th><button class="btn btn-dark">Редактировать</button></th>
           </tr>
           </tbody>
         </table>

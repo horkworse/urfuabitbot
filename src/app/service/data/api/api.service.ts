@@ -26,18 +26,18 @@ export class ApiService {
   }
 
   public validateToken(): Observable<boolean>{
-    return this._http.get<boolean>(this._baseUrl+"validate", {headers: this._tokenHeader});
+    return this._http.get<boolean>("/api/validate", {headers: this._tokenHeader});
   }
 
   public login(username: string, password: string):Observable<any>{
-    return this._http.post(this._baseUrl+"signin", {
+    return this._http.post("/api/signin", {
       username: username,
       password: password
     });
   }
 
   public signup(username: string, password: string, inviteKey: string):Observable<any>{
-    return this._http.post(this._baseUrl+"signup/"+inviteKey, {
+    return this._http.post("/api/signup/"+inviteKey, {
       username: username,
       password: password
     })
@@ -45,22 +45,22 @@ export class ApiService {
 
   public sendStudent(student: IStudent): Observable<any> {
     console.log("Sending")
-    return this._http.post<void>(this._baseUrl+"student/addStudentToGroup/", student, {headers: this._tokenHeader});
+    return this._http.post<void>("/api/student/addStudentToGroup/", student, {headers: this._tokenHeader});
   }
 
   public isAdmin(): Observable<boolean> {
-    return this._http.get<boolean>(this._baseUrl+"adminVerify", {headers: this._tokenHeader});
+    return this._http.get<boolean>("/api/adminVerify", {headers: this._tokenHeader});
   }
 
   public getAllStudent(): Observable<IStudent[]>{
-    return this._http.get<IStudent[]>(this._baseUrl+"student/getAll/", {headers: this._tokenHeader});
+    return this._http.get<IStudent[]>("/api/student/getAll/", {headers: this._tokenHeader});
   }
 
   newUser(newMentor: INewMentor, indexGroup: IGroupIndex) {
-    return this._http.post<number>(this._baseUrl+"createNewUser", [newMentor, indexGroup], {headers: this._tokenHeader});
+    return this._http.post<number>("/api/createNewUser", [newMentor, indexGroup], {headers: this._tokenHeader});
   }
 
   getStudentsByGroup() {
-    return this._http.get<IStudent[]>(this._baseUrl+'student/getByGroup', {headers: this._tokenHeader});
+    return this._http.get<IStudent[]>('/api/student/getByGroup', {headers: this._tokenHeader});
   }
 }
