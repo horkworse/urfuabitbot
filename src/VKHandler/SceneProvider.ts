@@ -7,6 +7,10 @@ import axios from 'axios';
 
 let PropertyProvider = require('./PropertyProvider');
 
+const vk = new VK({
+  token: new PropertyProvider().token
+});
+
 const api = new API({
   token: new PropertyProvider().token
 });
@@ -233,7 +237,7 @@ class SceneProvider {
         template: JSON.stringify({
           type : "carousel",
             elements: [{
-              photo_id: "-109837093_457242811",
+              photo_id: "-252077263_457271850",
               action: {
                 "type": "open_photo"
               },
@@ -304,9 +308,12 @@ class SceneProvider {
       context.send('Задайте свой вопрос, с вами свяжутся в ближайшее время');
       return;
     }
-    await context.send({
-      peer_id: 345583109,
-      //peer_id: 252077263,
+    await vk.api.messages.send({
+      //peer_id: 345583109, //dale
+      // peer_id: 103861777, //Jenya
+      //peer_id: 252077263, // garche
+      random_id: 0,
+      peer_id: 2000000204,
       message: userLink + '\n' + context.text
     });
     await context.send('Запрос отправлен, c вами скоро свяжутся');
