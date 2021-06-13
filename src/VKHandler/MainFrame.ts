@@ -5,7 +5,6 @@ let PropertyProvider = require('./PropertyProvider')
 let SceneProvider = require('./SceneProvider')
 import * as fs from 'fs';
 
-
 const vk: VK = new VK({
   token: new PropertyProvider().token
 });

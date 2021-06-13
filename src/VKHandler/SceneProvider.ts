@@ -76,7 +76,7 @@ class SceneProvider {
             },
             color: ButtonColor.PRIMARY
           })
-          .oneTime().inline()
+          .oneTime()
       });
     }
     return context.scene.step.go(context.messagePayload['command']);
@@ -117,7 +117,7 @@ class SceneProvider {
             },
             color: ButtonColor.SECONDARY
           })
-          .oneTime().inline()
+          .oneTime()
       });
     }
     return context.scene.step.go(context.messagePayload['command']);
@@ -166,7 +166,7 @@ class SceneProvider {
                 command: Steps.main
               },
               color: ButtonColor.SECONDARY
-            }).oneTime().inline()
+            }).oneTime()
           })
       console.log(groupIndex);
       return ax.get("http://localhost:5000/"+encodeURI(`bot/getMentors/group=${groupIndex}`)).then(res => {
@@ -181,7 +181,7 @@ class SceneProvider {
               },
               color: ButtonColor.SECONDARY
             })
-            .oneTime().inline()
+            .oneTime()
         });
       });
     }
@@ -224,7 +224,7 @@ class SceneProvider {
             },
             color: ButtonColor.SECONDARY
           })
-          .oneTime().inline()
+          .oneTime()
       });
     }
     return context.scene.step.go(context.messagePayload['command']);
@@ -313,7 +313,7 @@ class SceneProvider {
       // peer_id: 103861777, //Jenya
       //peer_id: 252077263, // garche
       random_id: 0,
-      peer_id: 2000000204,
+      peer_id: 2000000005,
       message: userLink + '\n' + context.text
     });
     await context.send('Запрос отправлен, c вами скоро свяжутся');
