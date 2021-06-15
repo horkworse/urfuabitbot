@@ -4,7 +4,6 @@ import {SceneManager} from '@vk-io/scenes';
 let PropertyProvider = require('./PropertyProvider')
 let SceneProvider = require('./SceneProvider')
 
-
 const vk: VK = new VK({
   token: new PropertyProvider().token
 });
