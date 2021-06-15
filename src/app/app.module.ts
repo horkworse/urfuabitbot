@@ -18,6 +18,8 @@ import { MentorControlComponent } from './components/admin-panel/children/mentor
 import {AuthGuardGuard} from './guard/auth-guard.guard';
 import {AdminGuardGuard} from './guard/admin-guard.guard';
 import { InputValidationDirective } from './directive/input-validation.directive';
+import {TuiButtonModule, TuiHintControllerModule, TuiRootModule, TuiTextfieldControllerModule} from '@taiga-ui/core';
+import {TuiInputModule, TuiInputPasswordModule} from '@taiga-ui/kit';
 
 @NgModule({
   declarations: [
@@ -33,15 +35,21 @@ import { InputValidationDirective } from './directive/input-validation.directive
   imports: [
     BrowserModule,
     RouterModule.forRoot([
-      { path: "", component: HomeComponent, canActivate: [AuthGuardGuard], },
-      { path: "login", component: LoginComponent},
-      { path: "admin", component: AdminPanelComponent, canActivate: [AdminGuardGuard]}
+      {path: '', component: HomeComponent, canActivate: [AuthGuardGuard],},
+      {path: 'login', component: LoginComponent},
+      {path: 'admin', component: AdminPanelComponent, canActivate: [AdminGuardGuard]}
     ]),
     NgbModule,
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatDialogModule
+    MatDialogModule,
+    TuiRootModule,
+    TuiButtonModule,
+    TuiInputModule,
+    TuiTextfieldControllerModule,
+    TuiHintControllerModule,
+    TuiInputPasswordModule
   ],
   entryComponents: [
     StudentSearchComponent
