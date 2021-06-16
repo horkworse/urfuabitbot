@@ -1,23 +1,44 @@
-
-
-<form *ngIf="isLoginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-  <p class="tui-form__header tui-form__header_margin-top_none">Вход в систему</p>
-  <div class="tui-form__row tui-form__row_multi-fields">
-
-    <tui-input-password class="tui-form__multi-field"
-                        tuiTextfieldExampleText="qwertySimple"
-                        formControlName="password"
-                        tuiHintContent="Дворовая псина"
-                        [innerText]="'Пароль'"
-    ></tui-input-password>
+<tui-root>
+  <div class="tui-container">
+    <div class="" *ngIf="isAuthorized()">
+      <button [innerText]="'Выйти'" (click)="logout()"></button>
+    </div>
+    <div *ngIf="!isAuthorized()">
+      <div class="tui-row"></div>
+      <form class="" *ngIf="isLoginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+        <p class="tui-form__header tui-form__header_margin-top_none">Вход в систему</p>
+        <div class="tui-form__row tui-form__row_multi-fields">
+          <tui-input class="tui-form__multi-field"
+                     tuiTextfieldExampleText="username"
+                     formControlName="login"
+                     tuiHintContent="Aaaaa?"
+          >Username</tui-input>
+          <tui-input-password class="tui-form__multi-field"
+                              tuiTextfieldExampleText="qwertySimple"
+                              formControlName="password"
+                              tuiHintContent="Дворовая псина"
+          >Пароль</tui-input-password>
+        </div>
+      </form>
+      <form *ngIf="!isLoginForm" [formGroup]="signupForm" class="">
+        <p class="">Регистрация</p>
+        <div class="">
+          <tui-input class="" formControlName="inviteKey" [inputValidation]="signupForm"
+                     placeholder="Invite Key">Ключ доступа</tui-input>
+        </div>
+        <div class="">
+          <tui-input class="tui-form__multi-field"
+                     formControlName="login"
+                     tuiHintContent="Username">Логин</tui-input>
+          <tui-input-password class="tuiTextfieldExampleText"
+                              formControlName="password"
+                              tuiHintContent="Password" (keyup.enter)="onSubmit()">Пароль</tui-input-password>
+        </div>
+      </form>
+      <div class="tui-space_top-3">
+        <button tuiButton appearance="secondary" class="tui-space_right-3" (click)="onSubmit()">{{currentAction}}</button>
+        <button tuiButton appearance="primary" (click)="switchForm()">{{currentTip}}</button>
+      </div>
+    </div>
   </div>
-</form>
-
-<tui-input class="tui-form__multi-field"
-           tuiTextfieldExampleText="username"
-           formControlName="login"
-           tuiHintContent="Aaaaa?"
-           [innerText]="'Username'"
-></tui-input>
-
-<button tuiButton appearance="primary">Help</button>
+</tui-root>
