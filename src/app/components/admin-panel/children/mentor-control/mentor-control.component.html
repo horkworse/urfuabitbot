@@ -1,58 +1,63 @@
-<h1 mat-dialog-title>Добавление нового наставника</h1>
-<div mat-dialog-content>
-  <form *ngIf="isFirstStage" [formGroup]="newMentorForm">
-    <div class="form-group">
-      <div class="form-row">
-        <div class="col">
-          <label for="frst">Имя наставника</label>
-          <input class="form-control" formControlName="firstName"
-                 id="frst" placeholder="Никита" autocomplete="off"
-                 [inputValidation]="newMentorForm">
-        </div>
-        <div class="col">
-          <label for="scnd">Фамилия наставника</label>
-          <input class="form-control" formControlName="secondName"
-                 id="scnd" placeholder="Альтернативный" autocomplete="off"
-                 [inputValidation]="newMentorForm">
-        </div>
+<form *ngIf="isFirstStage" [formGroup]="newMentorForm">
+  <div class="form-group">
+    <div class="tui-form__row_multi-fields">
+      <tui-input class="tui-form__multi-field"
+                 formControlName="firstName"
+                 tuiHintContent="Ты реально?"
+                 tuiTextfieldExampleText="Артем">
+        Имя наставника
+      </tui-input>
+
+      <tui-input class="tui-form__multi-field" formControlName="secondName"
+                 tuiHintContent="Фамилия типа, да" tuiTextfieldExampleText="Несуществующий"
+                 [inputValidation]="newMentorForm">Фамилия наставника
+      </tui-input>
+
+    </div>
+    <div class="tui-form__row">
+      <tui-input class="form-control" formControlName="vkLink"
+                 [inputValidation]="newMentorForm"
+      >Ссылка на профиль ВК
+      </tui-input>
+    </div>
+    <div class="tui-form__row tui-form__row_multi-fields">
+      <div class="tui-form__multi-field">
+        <tui-select
+          *tuiLet="institutes$ | async as institutes"
+          tuiTextfieldLabelOutside="false"
+          [valueContent]="stringify(institutes)"
+          formControlName="institute"
+        >
+          Институт
+          <ng-template tuiDataList>
+            <tui-data-list>
+              <button *ngFor="let data of institutes" tuiOption [value]="data.index">
+                {{data.name}}
+              </button>
+            </tui-data-list>
+          </ng-template>
+        </tui-select>
       </div>
-      <div class="form-row mt-1">
-        <label for="cvl">Ссылка на профиль ВК</label>
-        <input class="form-control" formControlName="vkLink"
-               [inputValidation]="newMentorForm" autocomplete="off"
-               id="cvl" placeholder="https://vk.com/axelunixal">
-      </div>
-      <div class="form-row mt-1">
-        <div class="col">
-          <label for="inst">Институт</label>
-          <select class="form-control" formControlName="institute" id="inst">
-            <option *ngFor="let data of institutes" [innerText]="data.name" [value]="data.index"></option>
-          </select>
-        </div>
-        <div class="col">
-          <label for="grp">Наименование группы</label>
-          <input class="form-control" formControlName="group"
-                 [inputValidation]="newMentorForm" autocomplete="off"
-                 id="grp" placeholder="РИ-110020">
-        </div>
-      </div>
-      <div class="form-row mt-4 justify-content-end">
-        <button class="btn btn-primary " (click)="onSubmit()">Добавить</button>
+      <div class=" tui-form__multi-field">
+        <tui-input class="form-control" formControlName="group"
+                   tuiTextfieldExampleText="РИ-110014">Наименование группы
+        </tui-input>
       </div>
     </div>
-  </form>
-  <div *ngIf="!isFirstStage" class="">
-    <div class="input-group row">
-      <div class="input-group-prepend">
-        <span class="input-group-text">KEY:</span>
-      </div>
-      <input class="form-control" placeholder="Дожидаемся ключа..." [value]="keyMessage">
-      <div class="input-group-append">
-        <span class="input-group-text btn-primary" (click)="copyKey()">Скопировать</span>
-      </div>
-    </div>
-    <div class="row mt-2 mr-2 justify-content-end">
-      <button class="btn btn-primary" (click)="onSubmit()">Добавить ещё</button>
+    <div class="tui-form__buttons tui-form__buttons_align_end">
+      <button class="tui-form__button" tuiButton appearance="flat" (click)="onSubmit()">Добавить</button>
     </div>
   </div>
+</form>
+<div *ngIf="!isFirstStage">
+  <div tuiGroup class="tui-row tui-space_bottom_3">
+    <tui-input [readOnly]="true" class="tui-group__inherit-item">KEY:</tui-input>
+    <tui-input [readOnly]="true" class="tui-group__inherit-item">{{keyMessage}}</tui-input>
+    <button tuiButton class="tui-group__inherit-item" appearance="outline" (click)="copyKey()">Скопировать</button>
+  </div>
+  <br>
+  <div class=" tui-row_align_end">
+    <button tuiButton appearance="secondary" class="tui-row" (click)="onSubmit()">Добавить ещё</button>
+  </div>
 </div>
+

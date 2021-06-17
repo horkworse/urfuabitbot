@@ -55,7 +55,7 @@ export class AuthService {
 
   public register(login: string, password: string, inviteKey: string){
     this._api.signup(login, password,inviteKey).subscribe(res => {
-      this._router.navigate([''])
+      this.authenticate(login, password)
     })
   }
 }

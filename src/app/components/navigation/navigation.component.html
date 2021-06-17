@@ -1,12 +1,14 @@
-<header>
-  <nav class="box-shadow navbar navbar-light bg-white border-bottom mb-3">
-    <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Satellite</a>
-      <ul class="navbar-nav flex-grow">
+<div class="tui-container">
+  <div class="tui-row nav-row">
+    <div class="tui-col-offset_1 tui-col_1">
+      <h3 class="tui-text_h3" [routerLink]="['/']">Satellite</h3>
+    </div>
+    <div class="tui-col_1 tui-col-offset_8">
+      <ul>
         <li>
-          <a class="nav-link" [routerLink]="['/login']">{{name}}</a>
+          <button tuiButton appearance="primary" size="m" [routerLink]="['/login']">{{name}}</button>
         </li>
       </ul>
     </div>
-  </nav>
-</header>
+  </div>
+</div>

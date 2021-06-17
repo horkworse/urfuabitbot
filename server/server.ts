@@ -56,9 +56,9 @@ app.post('/signup/:inviteKey', (req, res) => {
     }
     UserController.register(user, data.password, data.username).then((x) => {
       if (x) {
-        return res.sendStatus(200);
+        return res.status(200).json({text: 'Internal ERR'});
       }
-      return res.sendStatus(204);
+      return res.status(204).json({text: 'Internal ERR'});
     });
   });
 }); //Works

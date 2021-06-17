@@ -3,7 +3,6 @@ import {SessionManager} from '@vk-io/session';
 import {SceneManager} from '@vk-io/scenes';
 let PropertyProvider = require('./PropertyProvider')
 let SceneProvider = require('./SceneProvider')
-import * as fs from 'fs';
 
 const vk: VK = new VK({
   token: new PropertyProvider().token

@@ -1,23 +1,30 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../../../service/auth/auth.service';
 import {ApiService} from '../../../../service/data/api/api.service';
 import {IGroupIndex, INewMentor} from './new-user.interface';
 import {tap} from 'rxjs/operators';
-import {Subscription} from 'rxjs';
+import {Observable, of, Subscription} from 'rxjs';
 import {Clipboard} from '@angular/cdk/clipboard';
 import {Institute} from '../../../../../../server/models/Institute';
+import {TuiContextWithImplicit, tuiPure} from '@taiga-ui/cdk';
+
+interface Inst {
+  name: string,
+  index: Institute
+}
 
 @Component({
   selector: 'app-mentor-control',
   templateUrl: './mentor-control.component.html',
-  styleUrls: ['./mentor-control.component.css']
+  styleUrls: ['./mentor-control.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MentorControlComponent implements OnInit {
   public newMentorForm: FormGroup;
   public isFirstStage: boolean = true;
   public keyMessage: number;
-  public institutes: any[] = [
+  public institutes: Inst[] = [
     {
       name: 'ИРИТ-РтФ',
       index: Institute.rtf
@@ -26,12 +33,15 @@ export class MentorControlComponent implements OnInit {
       index: Institute.inmt
     }
   ];
+  public institutes$: Observable<any>
 
   constructor(
     private _formBuilder: FormBuilder,
     private _auth: AuthService,
     private _api: ApiService,
-    private _clipboard: Clipboard) {
+    private _clipboard: Clipboard,
+    ) {
+    this.institutes$ = of(this.institutes)
   }
 
   ngOnInit(): void {
@@ -42,6 +52,13 @@ export class MentorControlComponent implements OnInit {
       vkLink: [null, [Validators.required]],
       group: [null, [Validators.required]]
     });
+  }
+
+  @tuiPure
+  public stringify(items: Inst[]){
+    const map = new Map(items.map(({index, name}) => [index, name] as [number, string]));
+
+    return ({$implicit}: TuiContextWithImplicit<number>) => map.get($implicit) || ''
   }
 
   onSubmit() {
