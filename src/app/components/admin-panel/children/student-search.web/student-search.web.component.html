@@ -1,22 +1,36 @@
-<h1 mat-dialog-title>Список студентов</h1>
-<div mat-dialog-content class="table-wrapper">
-  <table class="table tableFixHead">
-    <thead>
-    <tr>
-      <th scope="col">ФИ</th>
-      <th scope="col">ВК</th>
-      <th scope="col">Институт</th>
-      <th scope="col">Запросить группу</th>
-      <th scope="col">Изменить данные</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr *ngFor="let student of studentStorage">
-      <th scope="row" [innerText]="student.fullname"></th>
-      <th><a [href]="'https://vk.com/'+student.vkLink" [innerText]="'https://vk.com/'+student.vkLink"></a></th>
-      <th [innerText]="resolveInstitute(student.institute)"></th>
-      <th><button class="btn btn-primary" (click)="resolveGroup(student._id)">Запрос</button></th>
-    </tr>
-    </tbody>
-  </table>
-</div>
+<tui-island hoverable="true">
+  <tui-input class="tui-col_3">
+    Поиск
+  </tui-input>
+  <tui-group>
+
+  </tui-group>
+</tui-island>
+<tui-island>
+  <div class="tui-container_fullwidth" *tuiLet="studentStorage$ | async as students">
+    <div *ngIf="studentStorage$" class="tb_wd">
+      <table class="tui-table tableFixHead">
+        <thead>
+        <tr class="tui-table__tr">
+          <th class="tui-table__th" scope="col">ФИ</th>
+          <th class="tui-table__th" scope="col">ВК</th>
+          <th class="tui-table__th" scope="col">Институт</th>
+          <th class="tui-table__th" scope="col">Запросить группу</th>
+          <th class="tui-table__th" scope="col">Изменить данные</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="tui-table__tr" *ngFor="let student of students">
+          <th class="tui-table__th" scope="row" [innerText]="student.fullname"></th>
+          <th class="tui-table__th"><a [href]="'https://vk.com/'+student.vkLink"
+                                       [innerText]="'https://vk.com/'+student.vkLink"></a></th>
+          <th class="tui-table__th" [innerText]="resolveInstitute(student.institute)"></th>
+          <th class="tui-table__th">
+            <button class="btn btn-primary" (click)="resolveGroup(student._id)">Запрос</button>
+          </th>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</tui-island>

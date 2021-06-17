@@ -13,6 +13,11 @@
 .tableFixHead {
   overflow: auto;
   max-height: 65vh;
+
+}
+
+.tb_wd{
+  min-width: 50vw;
 }
 
 .tableFixHead thead th {

@@ -1,24 +1,27 @@
-<div class="wrapper">
-  <div class="container">
-    <div class="card-columns">
-    <div class="">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Добавить наставника</h5>
-          <p class="card-text">Укажите данные наставника и получите его ключ-приглашение</p>
-          <a routerLink="createnewmentor" class="btn btn-primary" [innerText]="'Добавить'" (click)="newMentor()"></a>
-       </div>
-      </div>
-    </div>
-    <div class="w-100">
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">Показать список всех студентов</h5>
-          <p class="card-text">Просмотрите всех студентов вашего института в системе</p>
-          <a routerLink="allstudent" class="btn btn-primary" [innerText]="'Открыть'" (click)="showAllStudent()"></a>
+<div class="tui-container">
+  <div class="tui-row">
+    <div class="tui-col_md-6">
+      <tui-island hoverable='true'>
+        <div class="">
+          <div class="">
+            <h5 class="tui-island__title">Добавить наставника</h5>
+            <p class="tui-island__paragraph">Укажите данные наставника и получите его ключ-приглашение</p>
+            <button tuiButton  class="tui-island__footer-button" appearance="flat" (click)="newMentor()">Добавить</button>
+          </div>
         </div>
-      </div>
+      </tui-island>
     </div>
+    <div class="tui-col_md-6">
+      <tui-island hoverable='true'>
+        <div class="">
+          <div class="">
+            <h5 class="tui-island__title">Показать список всех студентов</h5>
+            <p class="tui-island__paragraph">Просмотрите всех студентов вашего института в системе</p>
+            <button tuiButton class="tui-island__footer-button" appearance="flat" (click)="showAllStudent()">Открыть</button>
+          </div>
+        </div>
+      </tui-island>
     </div>
   </div>
 </div>
+

@@ -1,52 +1,59 @@
 <div class="wrapper">
-  <div class="container">
-    <div class="form-container">
-      <form [formGroup]="studentForm">
-        <div class="form-group">
-          <div class="form-row">
-            <div class="col">
-              <label for="frst">Имя студента</label>
-              <input class="form-control" formControlName="firstname"
-                     id="frst" aria-describedby="help" placeholder="Василий"
-                     [inputValidation]="studentForm" autocomplete="off">
-              <small id="help" class="form-text">Для ускорения заполнения используйте Tab</small>
+  <div class="tui-container">
+    <tui-island [hoverable]="true">
+      <div class="tui-form">
+        <form [formGroup]="studentForm">
+          <div class="tui-space_bottom_1">
+            <div class="tui-form__row tui-form__row_multi-fields">
+              <div class="tui-form__multi-field">
+                <tui-input class="form-control" formControlName="firstname"
+                           id="frst" aria-describedby="help" placeholder="Василий"
+                           [inputValidation]="studentForm" autocomplete="off">Имя студента
+                </tui-input>
+              </div>
+              <div class="tui-form__multi-field">
+                <tui-input class="form-control" formControlName="secondname"
+                           [inputValidation]="studentForm" autocomplete="off"
+                           id="scn" placeholder="Шлягин">Фамилия
+                </tui-input>
+              </div>
             </div>
-            <div class="col">
-              <label for="scn">Фамилия</label>
-              <input class="form-control" formControlName="secondname"
-                     [inputValidation]="studentForm" autocomplete="off"
-                     id="scn" placeholder="Шлягин">
+            <div class="tui-form__row">
+              <tui-input class="form-control" formControlName="vkLink"
+                         [inputValidation]="studentForm" autocomplete="off"
+                         id="cvl" placeholder="https://vk.com/daleudolo">Ссылка на профиль ВК
+              </tui-input>
+            </div>
+            <div class="tui-form__buttons tui-form__buttons_align_end">
+              <button tuiButton appearance="primary" (click)="onSubmit()">Добавить</button>
             </div>
           </div>
-          <div class="form-row mt-1">
-            <label for="cvl">Ссылка на профиль ВК</label>
-            <input class="form-control" formControlName="vkLink"
-                   [inputValidation]="studentForm" autocomplete="off"
-                   id="cvl" placeholder="https://vk.com/daleudolo">
-          </div>
-          <div class="form-row mt-2 justify-content-end">
-            <button class="btn btn-primary" (click)="onSubmit()">Добавить</button>
-          </div>
-        </div>
-      </form>
+        </form>
+      </div>
+    </tui-island>
+    <br>
+    <tui-island class="" [hoverable]="true">
       <div class="table-wrapper">
-        <table class="table tableFixHead">
-          <thead>
-          <tr>
-            <th scope="col">ФИ</th>
-            <th scope="col">ВК</th>
-            <th scope="col">Изменить данные</th>
+        <table class="tui-table tui-table_font-size_1 tableFixHead">
+          <thead class="">
+          <tr class="tui-table__tr">
+            <th class="tui-table__th_text_center" scope="col">ФИ</th>
+            <th class="tui-table__th_text_center" scope="col">ВК</th>
+            <th class="tui-table__th_text_center" scope="col">Изменить данные</th>
           </tr>
           </thead>
           <tbody>
-          <tr *ngFor="let student of studentStorage">
-            <th scope="row" [innerText]="student.fullname"></th>
-            <th><a [href]="'https://vk.com/'+student.vkLink" [innerText]="'https://vk.com/'+student.vkLink"></a></th>
-            <th><button class="btn btn-dark">Редактировать</button></th>
+          <tr class="tui-table__tr" *ngFor="let student of studentStorage">
+            <th class="tui-table__th_text_center" scope="row" [innerText]="student.fullname"></th>
+            <th class="tui-table__th_text_center"><a tuiLink [href]="'https://vk.com/'+student.vkLink"
+                                                     [innerText]="'https://vk.com/'+student.vkLink"></a></th>
+            <th class="tui-table__th_text_center">
+              <button tuiButton appearance="secondary" (click)="changeUser(student._id)" size="s">Редактировать</button>
+            </th>
           </tr>
           </tbody>
         </table>
       </div>
-    </div>
+    </tui-island>
   </div>
 </div>

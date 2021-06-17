@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../service/auth/auth.service';
+import {SatelliteNotificationService} from '../../service/notifier/satellite-notification.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,10 @@ export class LoginComponent implements OnInit {
   private _isAuthorized: boolean;
   private _authSubcription;
 
-  constructor(private _formBuilder: FormBuilder, private _auth: AuthService) { }
+  constructor(
+    private _formBuilder: FormBuilder,
+    private _auth: AuthService,
+    private _notifyService: SatelliteNotificationService) { }
 
   ngOnInit(): void {
     this.isLoginForm = true;
@@ -53,10 +57,15 @@ export class LoginComponent implements OnInit {
   onSubmit() {
     if(this.isLoginForm && this.loginForm.valid){
       this._auth.authenticate(this.loginForm.value.login, this.loginForm.value.password)
+
+      return
     }
     if(!this.isLoginForm && this.signupForm.valid){
       this._auth.register(this.signupForm.value.login, this.signupForm.value.password, this.signupForm.value.inviteKey)
+
+      return
     }
+    this._notifyService.sendAuthWarning("Заполните все необходимые поля")
   }
 
   isAuthorized() {

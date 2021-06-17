@@ -1,43 +1,43 @@
 <tui-root>
   <div class="tui-container">
-    <div class="" *ngIf="isAuthorized()">
-      <button [innerText]="'Выйти'" (click)="logout()"></button>
+    <div class="tui-row tui-row_align_end" *ngIf="isAuthorized()">
+      <button tuiButton appearance="redshine" (click)="logout()">Выйти</button>
     </div>
     <div *ngIf="!isAuthorized()">
       <div class="tui-row"></div>
-      <form class="" *ngIf="isLoginForm" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <form class="" *ngIf="isLoginForm" [formGroup]="loginForm" (keydown.enter)="onSubmit()" (ngSubmit)="onSubmit()">
         <p class="tui-form__header tui-form__header_margin-top_none">Вход в систему</p>
         <div class="tui-form__row tui-form__row_multi-fields">
           <tui-input class="tui-form__multi-field"
-                     tuiTextfieldExampleText="username"
+                     tuiTextfieldExampleText="hornyHorse"
                      formControlName="login"
-                     tuiHintContent="Aaaaa?"
+                     tuiHintContent="Введите свой логин, указанный при регистрации"
           >Username</tui-input>
           <tui-input-password class="tui-form__multi-field"
                               tuiTextfieldExampleText="qwertySimple"
                               formControlName="password"
-                              tuiHintContent="Дворовая псина"
+                              tuiHintContent="Ну пароль, типа"
           >Пароль</tui-input-password>
         </div>
       </form>
-      <form *ngIf="!isLoginForm" [formGroup]="signupForm" class="">
-        <p class="">Регистрация</p>
+      <form *ngIf="!isLoginForm" [formGroup]="signupForm" class="" (keydown.enter)="onSubmit()">
+        <p class="tui-form__header tui-form__header_margin-top_none">Регистрация</p>
         <div class="">
-          <tui-input class="" formControlName="inviteKey" [inputValidation]="signupForm"
+          <tui-input class="tui-space_bottom_1" formControlName="inviteKey" [inputValidation]="signupForm"
                      placeholder="Invite Key">Ключ доступа</tui-input>
         </div>
-        <div class="">
+        <div class="tui-form__row tui-form__row_multi-fields">
           <tui-input class="tui-form__multi-field"
                      formControlName="login"
                      tuiHintContent="Username">Логин</tui-input>
-          <tui-input-password class="tuiTextfieldExampleText"
+          <tui-input-password class="tui-form__multi-field"
                               formControlName="password"
-                              tuiHintContent="Password" (keyup.enter)="onSubmit()">Пароль</tui-input-password>
+                              tuiHintContent="Password">Пароль</tui-input-password>
         </div>
       </form>
-      <div class="tui-space_top-3">
+      <div class="tui-space_top-3 tui-row flex-rr">
         <button tuiButton appearance="secondary" class="tui-space_right-3" (click)="onSubmit()">{{currentAction}}</button>
-        <button tuiButton appearance="primary" (click)="switchForm()">{{currentTip}}</button>
+        <button tuiButton appearance="redshine" (click)="switchForm()">{{currentTip}}</button>
       </div>
     </div>
   </div>
