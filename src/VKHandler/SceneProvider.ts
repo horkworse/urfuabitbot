@@ -156,9 +156,9 @@ class SceneProvider {
   private async resolveMentor(context: IStepContext) {
     if (context.scene.step.firstTime) {
       let groupIndex = context.text;
-      if (groupIndex !== /^(РИ|ФO|МТ)-\d{6}/gi)
+      if (groupIndex !== /^(РИ-|ФO-|МТ-)\d{6}/gi)
         return context.send({
-          message: "Некорректный номер группы",
+          message: "Некорректный номер группы, выйдите в главное меню и попробуйте ещё раз",
           keyboard: Keyboard.builder()
             .textButton({
               label: 'В главное меню',
