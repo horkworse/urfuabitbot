@@ -7,6 +7,12 @@
         "server"
       ],
       "extensions": "ts"
+    },
+    "VK-BnR": {
+      "patterns": [
+        "src/VKHandler"
+      ],
+      "extensions": "ts"
     }
   },
   "scripts": {
