@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
-import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
-import {StudentSearchComponent} from './children/student-search.web/student-search.web.component';
+import {Component, Inject, Injector, OnInit} from '@angular/core';
 import {MentorControlComponent} from './children/mentor-control/mentor-control.component';
+import {TuiDialogService} from '@taiga-ui/core';
+import {PolymorpheusComponent} from '@tinkoff/ng-polymorpheus';
+import {StudentSearchComponent} from './children/student-search.web/student-search.web.component';
 
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
-  styleUrls: ['./admin-panel.component.css']
+  styleUrls: ['./admin-panel.component.less']
 })
 export class AdminPanelComponent implements OnInit {
 
   constructor(
-    public dialog: MatDialog
-  ) {}
+    @Inject(TuiDialogService) private readonly _dialogService: TuiDialogService,
+    private _injector: Injector
+  ) {
+  }
 
 
   ngOnInit(): void {
@@ -20,22 +23,33 @@ export class AdminPanelComponent implements OnInit {
   }
 
   public newMentor() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.autoFocus = true;
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.panelClass = 'container';
-    dialogConfig.minWidth = '726px';
-    dialogConfig.maxWidth = '50vw';
-
-    this.dialog.open(MentorControlComponent, dialogConfig)
+    this._dialogService.open(
+      new PolymorpheusComponent(MentorControlComponent), {
+        label: "Добавление наставника"
+      }
+    ).subscribe(
+      () => {
+      },
+      error => console.error(error),
+      () => {
+        console.log('close');
+      }
+    );
   }
 
-  public showAllStudent(){
-    const dialogConfig = new MatDialogConfig()
-    dialogConfig.autoFocus = true;
-    dialogConfig.hasBackdrop = true;
-    dialogConfig.panelClass = 'container';
-
-    this.dialog.open(StudentSearchComponent, dialogConfig)
+  public showAllStudent() {
+    this._dialogService.open(
+      new PolymorpheusComponent(StudentSearchComponent, this._injector), {
+        label: "Список студентов",
+        size: "page"
+      }
+    ).subscribe(
+      () => {
+      },
+      error => console.error(error),
+      () => {
+        console.log('close');
+      }
+    );
   }
 }

@@ -76,7 +76,7 @@ class SceneProvider {
             },
             color: ButtonColor.PRIMARY
           })
-          .oneTime().inline()
+          .oneTime()
       });
     }
     return context.scene.step.go(context.messagePayload['command']);
@@ -117,7 +117,7 @@ class SceneProvider {
             },
             color: ButtonColor.SECONDARY
           })
-          .oneTime().inline()
+          .oneTime()
       });
     }
     return context.scene.step.go(context.messagePayload['command']);
@@ -156,9 +156,9 @@ class SceneProvider {
   private async resolveMentor(context: IStepContext) {
     if (context.scene.step.firstTime) {
       let groupIndex = context.text;
-      if (groupIndex !== /^(РИ|ФO|МТ)-\d{6}/gi)
+      if (groupIndex !== /^(РИ-|ФO-|МТ-)\d{6}/gi)
         return context.send({
-          message: "Некорректный номер группы",
+          message: "Некорректный номер группы, выйдите в главное меню и попробуйте ещё раз",
           keyboard: Keyboard.builder()
             .textButton({
               label: 'В главное меню',
@@ -166,7 +166,7 @@ class SceneProvider {
                 command: Steps.main
               },
               color: ButtonColor.SECONDARY
-            }).oneTime().inline()
+            }).oneTime()
           })
       console.log(groupIndex);
       return ax.get("http://localhost:5000/"+encodeURI(`bot/getMentors/group=${groupIndex}`)).then(res => {
@@ -181,7 +181,7 @@ class SceneProvider {
               },
               color: ButtonColor.SECONDARY
             })
-            .oneTime().inline()
+            .oneTime()
         });
       });
     }
@@ -224,7 +224,7 @@ class SceneProvider {
             },
             color: ButtonColor.SECONDARY
           })
-          .oneTime().inline()
+          .oneTime()
       });
     }
     return context.scene.step.go(context.messagePayload['command']);
@@ -233,11 +233,11 @@ class SceneProvider {
   private async entryHostelInfo(context: IStepContext) {
     if (context.scene.step.firstTime) {
       return context.send({
-        message: "Поселение в общежитие",
+        message: "По моей информации",
         template: JSON.stringify({
           type : "carousel",
             elements: [{
-              photo_id: "-194532672_457239040",
+              photo_id: "-194532672_457239042",
               action: {
                 "type": "open_photo"
               },
@@ -250,7 +250,7 @@ class SceneProvider {
               }]
             },
               {
-                photo_id: "-194532672_457239039",
+                photo_id: "-194532672_457239043",
                 action: {
                   "type": "open_photo"
                 },
@@ -263,7 +263,7 @@ class SceneProvider {
                 }]
               },
               {
-                photo_id: "-194532672_457239038",
+                photo_id: "-194532672_457239045",
                 action: {
                   "type": "open_photo"
                 },
@@ -274,8 +274,9 @@ class SceneProvider {
                     payload: {command: Steps.main}
                   }
                 }]
-              },{
-                photo_id: "-194532672_457239037",
+              },
+              {
+                photo_id: "-194532672_457239046",
                 action: {
                   "type": "open_photo"
                 },
@@ -286,8 +287,9 @@ class SceneProvider {
                     payload: {command: Steps.main}
                   }
                 }]
-              },{
-                photo_id: "-194532672_457239036",
+              },
+              {
+                photo_id: "-194532672_457239047",
                 action: {
                   "type": "open_photo"
                 },
@@ -298,7 +300,7 @@ class SceneProvider {
                     payload: {command: Steps.main}
                   }
                 }]
-              },]
+              }]
           })
         })
       }
@@ -308,32 +310,76 @@ class SceneProvider {
   private async stipendInfo(context: IStepContext) {
     if (context.scene.step.firstTime) {
       return context.send({
-        message: 'Государственная стипендия (без учета районного коэффициента):\n' +
-          '-академическая стипендия по программам ВО (бакалавриат и специалитет) — 2160 ₽;\n' +
-          '-академическая стипендия по программам ВО (магистратура) — 3240 ₽\n\n' +
-          'Академическая стипендия студентам, сдавшим сессию на «отлично»:\n' +
-          '-академическая стипендия по программам ВО (бакалавриат и специалитет) — 3240 ₽; \n' +
-          '-академическая стипендия по программам ВО (магистратура) — 4856 ₽\n\n' +
-          'Социальная стипендия:\n' +
-          '-студентам, являющимся ветеранами боевых действий, а также студентам, проходившим в течение не менее трех лет военную службу по контракту \nна воинских должностях\n' +
-          '1) по программам ВО — 2545 ₽\n' +
-          '2) по программам СПО — 1835 ₽\n' +
-          '-студентам, являющимся детьми-сиротами и детьми, оставшимися без попечения родителей (с полным списком можно ознакомиться в приказе 720/\n03 от 28.08.2019 на сайте УрФУ)\n\n' +
-          'Также студенты УрФУ могут претендовать на именные стипендии. Вот некоторые из них:\n' +
-          '-cтипендия Губернатора Свердловской области:\n' +
-          'Для нее необходимо наличие достижений в учебе: победители и/или призеры международных, всероссийских, региональных олимпиад, чемпионатов, \nконкурсов; участие в международных, всероссийских и региональных конференциях, форумах, фестивалях и т.д.\n' +
-          '-cтипендия первого Президента России Б.Н. Ельцина:\n' +
-          '-cтипендия Президента Российской Федерации',
-        keyboard: Keyboard.builder()
-          .textButton({
-            label: 'В главное меню',
-            payload: {
-              command: Steps.main,
+        message: 'По моей информации:',
+        template: JSON.stringify({
+          type : "carousel",
+          elements: [{
+            photo_id: "-194532672_457239049",
+            action: {
+              "type": "open_photo"
             },
-            color: ButtonColor.SECONDARY
-          })
-          .oneTime()
-      });
+            buttons: [{
+              action: {
+                type: "text",
+                label: "В главное меню",
+                payload: {command: Steps.main}
+              }
+            }]
+          },
+            {
+              photo_id: "-194532672_457239050",
+              action: {
+                "type": "open_photo"
+              },
+              buttons: [{
+                action: {
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
+              }]
+            },
+            {
+              photo_id: "-194532672_457239051",
+              action: {
+                "type": "open_photo"
+              },
+              buttons: [{
+                action: {
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
+              }]
+            },
+            {
+              photo_id: "-194532672_457239052",
+              action: {
+                "type": "open_photo"
+              },
+              buttons: [{
+                action: {
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
+              }]
+            },
+            {
+              photo_id: "-194532672_457239053",
+              action: {
+                "type": "open_photo"
+              },
+              buttons: [{
+                action: {
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
+              }]
+            }]
+        })
+      })
     }
     return context.scene.step.go(context.messagePayload['command']);
   }
@@ -360,20 +406,26 @@ class SceneProvider {
   private async whoIsMentor(context: IStepContext) {
     if (context.scene.step.firstTime) {
       return context.send({
-        message: 'Наставники это студенты старших курсов, которые с удовольствием помогут вам начать жизнь в институте. ' +
-          'Научат всему что сами умеют и ответят на все вопросы \n' + 'Подробнее можете прочитать по ссылке: https://urfu.ru/ru/students/leisure/oso/associacija-studentov-nastavnikov/',
-        keyboard: Keyboard.builder()
-          .textButton({
-            label: 'В главное меню',
-            payload: {
-              command: Steps.main,
+        message: 'По моей информации:',
+        template: JSON.stringify({
+          type: "carousel",
+          elements: [{
+            photo_id: "-194532672_457239048",
+            action: {
+              "type": "open_photo"
             },
-            color: ButtonColor.SECONDARY
-          })
-          .oneTime()
-      });
+            buttons: [{
+              action: {
+                type: "text",
+                label: "В главное меню",
+                payload: {command: Steps.main}
+              }
+            }]
+          }]
+        })
+      })
+      return context.scene.step.go(context.messagePayload['command']);
     }
-    return context.scene.step.go(context.messagePayload['command']);
   }
 
   private scene: IScene = new StepScene('abit', [

@@ -3,17 +3,19 @@ import {ApiService} from '../../service/data/api/api.service';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {IStudent} from '../../../../server/models/student';
 import {Subscription} from 'rxjs';
+import {SatelliteNotificationService} from '../../service/notifier/satellite-notification.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.less']
 })
 export class HomeComponent implements OnInit {
   public studentForm: FormGroup;
   public studentStorage: IStudent[] = [];
 
   constructor(
+    private _notifyService: SatelliteNotificationService,
     private _api: ApiService,
     private _formBuilder: FormBuilder
   ) {
@@ -30,23 +32,25 @@ export class HomeComponent implements OnInit {
 
   public onSubmit() {
     if (!this.studentForm.valid) {
-      console.log('Error');
+      this._notifyService.sendNotValidForm()
 
       return;
     }
-    let correctLink = this.studentForm.value.vkLink.split('/')
+    let correctLink = this.studentForm.value.vkLink.split('/');
     let student: IStudent = {
       firstName: this.studentForm.value.firstname,
       secondName: this.studentForm.value.secondname,
-      vkLink: correctLink[correctLink.length-1]
+      vkLink: correctLink[correctLink.length - 1]
     };
     let subs = this._api.sendStudent(<IStudent> student).subscribe(
-      next=>{},
-      error => {},
+      next => {
+      },
+      error => {
+      },
       () => {
-        student['fullname'] = `${student.secondName} ${student.firstName}`
-        this.studentStorage.push(student)
-        subs.unsubscribe()
+        student['fullname'] = `${student.secondName} ${student.firstName}`;
+        this.studentStorage.push(student);
+        subs.unsubscribe();
       });
     this.studentForm.reset();
   }
@@ -60,5 +64,9 @@ export class HomeComponent implements OnInit {
         console.log('Sub delete');
         groupSub.unsubscribe();
       });
+  }
+
+  public changeUser(_id: string) {
+    this._notifyService.sendNotImplemented();
   }
 }
