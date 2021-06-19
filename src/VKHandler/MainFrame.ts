@@ -18,8 +18,12 @@ vk.updates.on("message_new", sceneManager.middlewareIntercept);
 const sceneProvider = new SceneProvider(sceneManager);
 
 
+
 vk.updates.on("message_new", (context, next) => {
-  return context.scene.enter('abit');
+  console.log(`[${context.isChat}] - id: ${context.chatId} text: ${context.text}`)
+  if(!context.isChat)
+    return context.scene.enter('abit');
+
 })
 
 vk.updates.start().then(r => console.log("Start success!!!"));

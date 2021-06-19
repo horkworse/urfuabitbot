@@ -237,7 +237,7 @@ class SceneProvider {
         template: JSON.stringify({
           type : "carousel",
             elements: [{
-              photo_id: "-252077263_457271850",
+              photo_id: "-194532672_457239040",
               action: {
                 "type": "open_photo"
               },
@@ -250,7 +250,7 @@ class SceneProvider {
               }]
             },
               {
-                photo_id: "-109837093_457242811",
+                photo_id: "-194532672_457239039",
                 action: {
                   "type": "open_photo"
                 },
@@ -261,7 +261,44 @@ class SceneProvider {
                     payload: {command: Steps.main}
                   }
                 }]
-              }]
+              },
+              {
+                photo_id: "-194532672_457239038",
+                action: {
+                  "type": "open_photo"
+                },
+                buttons: [{
+                  action: {
+                    type: "text",
+                    label: "В главное меню",
+                    payload: {command: Steps.main}
+                  }
+                }]
+              },{
+                photo_id: "-194532672_457239037",
+                action: {
+                  "type": "open_photo"
+                },
+                buttons: [{
+                  action: {
+                    type: "text",
+                    label: "В главное меню",
+                    payload: {command: Steps.main}
+                  }
+                }]
+              },{
+                photo_id: "-194532672_457239036",
+                action: {
+                  "type": "open_photo"
+                },
+                buttons: [{
+                  action: {
+                    type: "text",
+                    label: "В главное меню",
+                    payload: {command: Steps.main}
+                  }
+                }]
+              },]
           })
         })
       }
@@ -313,7 +350,7 @@ class SceneProvider {
       // peer_id: 103861777, //Jenya
       //peer_id: 252077263, // garche
       random_id: 0,
-      peer_id: 2000000204,
+      peer_id: 2000000005,
       message: userLink + '\n' + context.text
     });
     await context.send('Запрос отправлен, c вами скоро свяжутся');
