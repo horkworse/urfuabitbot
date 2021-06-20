@@ -159,8 +159,16 @@ class SceneProvider {
       const reExpression = /^(РИ-|ФO-|МТ-)\d{6}/gi;
       if (!reExpression.test(groupIndex))
         return context.send({
-          message: "Некорректный номер группы, выйдите в главное меню и попробуйте ещё раз",
+          message: "Некорректный номер группы, попробуйте ещё раз",
           keyboard: Keyboard.builder()
+            .textButton({
+              label: 'Ввести заново',
+              payload: {
+                command: Steps.findMentor
+              },
+              color: ButtonColor.PRIMARY
+            })
+            .row()
             .textButton({
               label: 'В главное меню',
               payload: {
@@ -413,20 +421,29 @@ class SceneProvider {
           elements: [{
             photo_id: "-194532672_457239048",
             action: {
-              "type": "open_photo"
+              "type": "open_photo",
             },
-            buttons: [{
-              action: {
-                type: "text",
-                label: "В главное меню",
-                payload: {command: Steps.main}
+            buttons: [
+              {
+                action: {
+                  type: "open_link",
+                  label: "Подробнее на сайте",
+                  link: "https://urfu.ru/ru/students/leisure/oso/associacija-studentov-nastavnikov/"
+                }
+              },
+              {
+                action: {
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
               }
-            }]
+            ]
           }]
         })
       })
-      return context.scene.step.go(context.messagePayload['command']);
     }
+    return context.scene.step.go(context.messagePayload['command']);
   }
 
   private scene: IScene = new StepScene('abit', [
