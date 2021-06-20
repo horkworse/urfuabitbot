@@ -27,7 +27,6 @@ const ax = axios.create({
 })
 
 
-
 enum Steps {
   main,
   findMentor,
@@ -124,8 +123,8 @@ class SceneProvider {
   }
 
   private async mentorRTF(context: IStepContext | MessageContext) {
-    if(context.scene.step.firstTime){
-      return  context.send({
+    if (context.scene.step.firstTime) {
+      return context.send({
         message: 'Для того чтобы найти наставника, введите номер группы в формате:"РИ-110023"',
       });
     }
@@ -176,12 +175,12 @@ class SceneProvider {
               },
               color: ButtonColor.SECONDARY
             }).oneTime()
-          })
+        })
       console.log(groupIndex);
-      return ax.get("http://localhost:5000/"+encodeURI(`bot/getMentors/group=${groupIndex}`)).then(res => {
-        console.log(res);
+      return ax.get("http://localhost:5000/" + encodeURI(`bot/getMentors/group=${groupIndex.toUpperCase()}`)).then(res => {
+        console.log(res.data);
         context.send({
-          message: "Твои наставники: \n"+res.data.text + "\nСкорее пиши им, они тебе все расскажут",
+          message: "Твои наставники: \n" + res.data.text + "\nСкорее пиши им, они тебе все расскажут",
           keyboard: Keyboard.builder()
             .textButton({
               label: 'В главное меню',
@@ -192,8 +191,30 @@ class SceneProvider {
             })
             .oneTime()
         });
+      }).catch(e => {
+        context.send({
+          message: "Такой группы не существует, проверьте данные и попробуйте ещё раз",
+          keyboard: Keyboard.builder()
+            .textButton({
+              label: 'Ввести заново',
+              payload: {
+                command: Steps.findMentor
+              },
+              color: ButtonColor.PRIMARY
+            })
+            .row()
+            .textButton({
+              label: 'В главное меню',
+              payload: {
+                command: Steps.main
+              },
+              color: ButtonColor.SECONDARY
+            }).oneTime()
+
+        })
       });
     }
+
     return context.scene.step.go(context.messagePayload['command']);
   }
 
@@ -244,9 +265,22 @@ class SceneProvider {
       return context.send({
         message: "По моей информации",
         template: JSON.stringify({
-          type : "carousel",
-            elements: [{
-              photo_id: "-194532672_457239042",
+          type: "carousel",
+          elements: [{
+            photo_id: "-194532672_457239042",
+            action: {
+              "type": "open_photo"
+            },
+            buttons: [{
+              action: {
+                type: "text",
+                label: "В главное меню",
+                payload: {command: Steps.main}
+              }
+            }]
+          },
+            {
+              photo_id: "-194532672_457239043",
               action: {
                 "type": "open_photo"
               },
@@ -258,61 +292,48 @@ class SceneProvider {
                 }
               }]
             },
-              {
-                photo_id: "-194532672_457239043",
-                action: {
-                  "type": "open_photo"
-                },
-                buttons: [{
-                  action: {
-                    type: "text",
-                    label: "В главное меню",
-                    payload: {command: Steps.main}
-                  }
-                }]
+            {
+              photo_id: "-194532672_457239045",
+              action: {
+                "type": "open_photo"
               },
-              {
-                photo_id: "-194532672_457239045",
+              buttons: [{
                 action: {
-                  "type": "open_photo"
-                },
-                buttons: [{
-                  action: {
-                    type: "text",
-                    label: "В главное меню",
-                    payload: {command: Steps.main}
-                  }
-                }]
-              },
-              {
-                photo_id: "-194532672_457239046",
-                action: {
-                  "type": "open_photo"
-                },
-                buttons: [{
-                  action: {
-                    type: "text",
-                    label: "В главное меню",
-                    payload: {command: Steps.main}
-                  }
-                }]
-              },
-              {
-                photo_id: "-194532672_457239047",
-                action: {
-                  "type": "open_photo"
-                },
-                buttons: [{
-                  action: {
-                    type: "text",
-                    label: "В главное меню",
-                    payload: {command: Steps.main}
-                  }
-                }]
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
               }]
-          })
+            },
+            {
+              photo_id: "-194532672_457239046",
+              action: {
+                "type": "open_photo"
+              },
+              buttons: [{
+                action: {
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
+              }]
+            },
+            {
+              photo_id: "-194532672_457239047",
+              action: {
+                "type": "open_photo"
+              },
+              buttons: [{
+                action: {
+                  type: "text",
+                  label: "В главное меню",
+                  payload: {command: Steps.main}
+                }
+              }]
+            }]
         })
-      }
+      })
+    }
     return context.scene.step.go(context.messagePayload['command']);
   }
 
@@ -321,7 +342,7 @@ class SceneProvider {
       return context.send({
         message: 'По моей информации:',
         template: JSON.stringify({
-          type : "carousel",
+          type: "carousel",
           elements: [{
             photo_id: "-194532672_457239049",
             action: {
